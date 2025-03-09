@@ -15,17 +15,49 @@ class HyperparameterExtractor(ast.NodeVisitor):
         self.hyperparameters = []
         self.source_lines = []
         self.framework = "unknown"
+        self.imports = set()  # Track imports for better framework detection
+    
+    def visit_Import(self, node):
+        """Detect framework imports"""
+        for name in node.names:
+            self.imports.add(name.name)
+            if name.name == 'tensorflow' or name.name.startswith('tensorflow.'):
+                self.framework = "tensorflow"
+            elif name.name == 'torch' or name.name.startswith('torch.'):
+                self.framework = "pytorch"
+            elif name.name == 'sklearn' or name.name.startswith('sklearn.'):
+                self.framework = "sklearn"
+        self.generic_visit(node)
+
+    def visit_ImportFrom(self, node):
+        """Detect from-imports of frameworks"""
+        if node.module:
+            self.imports.add(node.module)
+            if node.module == 'tensorflow' or node.module.startswith('tensorflow.'):
+                self.framework = "tensorflow"
+            elif node.module == 'torch' or node.module.startswith('torch.'):
+                self.framework = "pytorch"
+            elif node.module == 'sklearn' or node.module.startswith('sklearn.'):
+                self.framework = "sklearn"
+            # Check for keras imports as they indicate TensorFlow
+            elif node.module == 'keras' or node.module.startswith('keras.'):
+                self.framework = "tensorflow"
+        self.generic_visit(node)
     
     def visit_Call(self, node):
         """Detect function calls that might contain hyperparameters"""
-        # Framework detection
+        # Framework detection from API calls
         class_name = None
         if hasattr(node, 'func') and isinstance(node.func, ast.Attribute):
+            # Store potential TensorFlow indicators
             if node.func.attr in ['compile', 'fit', 'Sequential', 'Model']:
                 self.framework = "tensorflow"
+            # Store potential PyTorch indicators
             elif node.func.attr in ['SGD', 'Adam', 'RMSprop']:
-                # Try to detect PyTorch
-                if hasattr(node.func, 'value') and hasattr(node.func.value, 'attr'):
+                if hasattr(node.func, 'value') and hasattr(node.func.value, 'id'):
+                    if node.func.value.id == 'optim':
+                        self.framework = "pytorch"
+                elif hasattr(node.func, 'value') and hasattr(node.func.value, 'attr'):
                     if node.func.value.attr == 'optim':
                         self.framework = "pytorch"
             
@@ -37,7 +69,9 @@ class HyperparameterExtractor(ast.NodeVisitor):
             if kw.arg in ['learning_rate', 'batch_size', 'epochs', 'optimizer', 
                         'dropout', 'activation', 'momentum', 'beta_1', 'beta_2',
                         'weight_decay', 'filters', 'kernel_size', 'units',
-                        'num_layers', 'hidden_size', 'lr']:
+                        'num_layers', 'hidden_size', 'lr', 'epsilon', 'l1_regularization',
+                        'l2_regularization', 'num_heads', 'max_length', 'padding',
+                        'num_filters', 'num_epochs', 'n_estimators', 'max_depth']:
                 
                 # Get the value as a string
                 if isinstance(kw.value, ast.Num):
@@ -82,83 +116,190 @@ class HyperparameterExtractor(ast.NodeVisitor):
         self.generic_visit(node)
     
     def _infer_param_type(self, param_name):
-        """Infer parameter type based on name"""
-        optimizer_params = ['learning_rate', 'lr', 'momentum', 'beta_1', 'beta_2']
-        architecture_params = ['units', 'filters', 'kernel_size', 'hidden_size', 'num_layers']
-        regularization_params = ['dropout', 'weight_decay', 'l1', 'l2']
-        training_params = ['batch_size', 'epochs']
+        """Infer parameter type based on name with more specificity"""
+        type_mappings = {
+            # Optimizer params
+            'learning_rate': 'optimizer', 'lr': 'optimizer', 'momentum': 'optimizer',
+            'beta_1': 'optimizer', 'beta_2': 'optimizer', 'epsilon': 'optimizer',
+            'weight_decay': 'optimizer', 'rho': 'optimizer', 'betas': 'optimizer',
+            
+            # Architecture params
+            'units': 'architecture', 'filters': 'architecture', 'kernel_size': 'architecture',
+            'hidden_size': 'architecture', 'num_layers': 'architecture', 
+            'num_heads': 'architecture', 'embedding_dim': 'architecture',
+            'num_filters': 'architecture', 'hidden_dim': 'architecture',
+            'n_estimators': 'architecture', 'max_depth': 'architecture',
+            
+            # Activation functions
+            'activation': 'activation_function', 'activation_fn': 'activation_function',
+            
+            # Regularization params
+            'dropout': 'regularization', 'l1': 'regularization', 'l2': 'regularization',
+            'l1_regularization': 'regularization', 'l2_regularization': 'regularization',
+            
+            # Training params
+            'batch_size': 'training', 'epochs': 'training', 'num_epochs': 'training',
+            'steps_per_epoch': 'training', 'max_epochs': 'training',
+            
+            # Input processing
+            'padding': 'preprocessing', 'max_length': 'preprocessing'
+        }
         
-        if param_name in optimizer_params:
-            return "optimizer"
-        elif param_name in architecture_params:
-            return "architecture"
-        elif param_name in regularization_params:
-            return "regularization"
-        elif param_name in training_params:
-            return "training"
-        else:
-            return "other"
+        return type_mappings.get(param_name, 'other')
     
     def infer_model_type(self, code):
         """Infer model type from code with more specificity"""
         code_lower = code.lower()
         
-        # Check for CNN indicators
-        if 'conv2d' in code_lower or 'conv1d' in code_lower or 'convolution' in code_lower:
+        # More comprehensive checks for model types
+        # CNN indicators
+        if any(term in code_lower for term in ['conv2d', 'conv1d', 'convolution', 'cnn']):
             return 'CNN'
-        # Check for RNN indicators
-        elif 'lstm' in code_lower:
+        
+        # RNN variants
+        if 'lstm' in code_lower:
             return 'LSTM'
         elif 'gru' in code_lower:
             return 'GRU'
-        elif 'rnn' in code_lower:
+        elif any(term in code_lower for term in ['rnn', 'recurrent']):
             return 'RNN'
-        # Check for Transformer indicators
-        elif 'transformer' in code_lower or 'attention' in code_lower:
+        
+        # Transformer models
+        if any(term in code_lower for term in ['transformer', 'attention', 'multihead']):
             return 'Transformer'
-        # Check for other specific architectures
-        elif 'densenet' in code_lower:
-            return 'DenseNet'
-        elif 'resnet' in code_lower:
-            return 'ResNet'
-        elif 'mobilenet' in code_lower:
-            return 'MobileNet'
-        elif 'dense' in code_lower or 'fully connected' in code_lower:
+        
+        # Specific architectures
+        architecture_indicators = {
+            'resnet': 'ResNet',
+            'densenet': 'DenseNet',
+            'vgg': 'VGG',
+            'inception': 'InceptionNet',
+            'efficientnet': 'EfficientNet',
+            'mobilenet': 'MobileNet',
+            'yolo': 'YOLO',
+            'ssd': 'SSD',
+            'unet': 'UNet',
+            'facenet': 'FaceNet',
+            'bert': 'BERT',
+            'gpt': 'GPT'
+        }
+        
+        for indicator, model_name in architecture_indicators.items():
+            if indicator in code_lower:
+                return model_name
+        
+        # Detect feedforward networks
+        if any(term in code_lower for term in ['dense', 'fully connected', 'feedforward', 'mlp']):
             return 'Dense Neural Network'
-        else:
-            return 'Neural Network'
+        
+        # Check imports for model hints
+        if 'sklearn' in self.imports:
+            if any(term in code_lower for term in ['randomforest', 'random_forest']):
+                return 'RandomForest'
+            elif 'gradient' in code_lower and 'boost' in code_lower:
+                return 'GradientBoosting'
+            elif 'svm' in code_lower or 'support vector' in code_lower:
+                return 'SVM'
+            return 'ML Algorithm'  # Generic sklearn algorithm
+            
+        return 'Neural Network'  # Default
     
     def infer_task(self, code):
         """Infer ML task with more specificity"""
         code_lower = code.lower()
         
         # Classification tasks
-        if 'imagenet' in code_lower or 'cifar' in code_lower or 'mnist' in code_lower:
+        if any(dataset in code_lower for dataset in ['imagenet', 'cifar', 'mnist']):
             return 'image_classification'
-        elif 'object detection' in code_lower or 'yolo' in code_lower or 'ssd' in code_lower:
+        elif any(term in code_lower for term in ['object detection', 'yolo', 'ssd', 'rcnn']):
             return 'object_detection'
-        elif 'sentiment' in code_lower or 'text classification' in code_lower:
+        elif any(term in code_lower for term in ['sentiment', 'text classification', 'document classification']):
             return 'text_classification'
-        elif 'categorical_crossentropy' in code_lower or 'classification' in code_lower:
+        elif any(term in code_lower for term in ['categorical_crossentropy', 'crossentropy', 'accuracy']):
             return 'classification'
         
         # Regression tasks
-        elif 'mean_squared_error' in code_lower or 'mse' in code_lower or 'regression' in code_lower:
+        elif any(term in code_lower for term in ['mean_squared_error', 'mse', 'mae', 'regression']):
             return 'regression'
         
         # Generation tasks
-        elif 'generator' in code_lower or 'gan' in code_lower:
+        elif any(term in code_lower for term in ['generator', 'gan', 'generative']):
             return 'image_generation'
-        elif 'text generation' in code_lower or 'language model' in code_lower:
+        elif any(term in code_lower for term in ['text generation', 'language model', 'gpt', 'completion']):
             return 'text_generation'
         
         # Sequence tasks
-        elif 'sequence' in code_lower or 'time series' in code_lower:
+        elif any(term in code_lower for term in ['sequence', 'time series', 'forecasting', 'prediction']):
             return 'sequence_prediction'
+        
+        # NLP tasks
+        elif any(term in code_lower for term in ['nlp', 'token', 'embedding', 'bert', 'transformer', 'attention']):
+            if 'translation' in code_lower:
+                return 'machine_translation'
+            elif any(term in code_lower for term in ['question', 'answer']):
+                return 'question_answering'
+            return 'nlp_task'
+        
+        # Reinforcement learning
+        elif any(term in code_lower for term in ['reinforcement', 'agent', 'environment', 'reward', 'action']):
+            return 'reinforcement_learning'
+        
+        # Unsupervised learning
+        elif any(term in code_lower for term in ['cluster', 'kmeans']):
+            return 'clustering'
+        elif any(term in code_lower for term in ['autoencoder', 'dimension reduction', 'pca']):
+            return 'dimensionality_reduction'
         
         # Default case
         else:
             return 'general_ml_task'
+    
+    def infer_dataset_size(self, code):
+        """Infer dataset size from code context"""
+        code_lower = code.lower()
+        
+        # Dataset size indicators
+        large_indicators = ['imagenet', 'large', 'big', 'million', '1000000', '10000000']
+        medium_indicators = ['medium', 'moderate', '10000', '100000', 'thousand', 'cifar100']
+        small_indicators = ['mnist', 'small', 'tiny', 'few', '1000', 'hundred', 'cifar10']
+        
+        # Check for explicit mentions
+        for indicator in large_indicators:
+            if indicator in code_lower:
+                return 'large'
+                
+        for indicator in medium_indicators:
+            if indicator in code_lower:
+                return 'medium'
+                
+        for indicator in small_indicators:
+            if indicator in code_lower:
+                return 'small'
+        
+        # Check for batch size as a hint (large batch sizes often indicate larger datasets)
+        batch_size_indicators = [
+            r'batch_size\s*=\s*(\d+)',
+            r'batch_size:\s*(\d+)',
+            r'batch_size\s+(\d+)'
+        ]
+        
+        import re
+        for pattern in batch_size_indicators:
+            match = re.search(pattern, code_lower)
+            if match:
+                try:
+                    batch_size = int(match.group(1))
+                    if batch_size >= 128:
+                        return 'large'
+                    elif batch_size >= 32:
+                        return 'medium'
+                    else:
+                        return 'small'
+                except (ValueError, IndexError):
+                    pass
+        
+        return 'unspecified'  # Default if no clear indicators
+
 
 def process_code_file(content, repo_name, file_path):
     """Process a Python code file to extract hyperparameters"""
@@ -174,6 +315,15 @@ def process_code_file(content, repo_name, file_path):
         extractor.source_lines = source_lines
         extractor.visit(tree)
         
+        # Try additional framework detection if still unknown
+        if extractor.framework == "unknown":
+            if "tf." in content or "tensorflow" in content.lower():
+                extractor.framework = "tensorflow"
+            elif "torch." in content or "nn." in content.lower():
+                extractor.framework = "pytorch"
+            elif "sklearn" in content.lower() or "scikit-learn" in content.lower():
+                extractor.framework = "sklearn"
+        
         # Generate a unique ID
         framework_prefix = extractor.framework[:2] if extractor.framework != "unknown" else "ml"
         unique_id = f"{framework_prefix}_{uuid.uuid4().hex[:8]}"
@@ -184,6 +334,7 @@ def process_code_file(content, repo_name, file_path):
         # Infer model type and task
         model_type = extractor.infer_model_type(content)
         task = extractor.infer_task(content)
+        dataset_size = extractor.infer_dataset_size(content)
         
         # Create the metadata for the code sample
         metadata = {
@@ -193,6 +344,7 @@ def process_code_file(content, repo_name, file_path):
             "hyperparameters": extractor.hyperparameters,
             "model_type": model_type,
             "task": task,
+            "dataset_size": dataset_size,
             "code_snippet": content
         }
         
@@ -200,6 +352,7 @@ def process_code_file(content, repo_name, file_path):
     except SyntaxError:
         # Handle files with syntax errors
         return None
+
 def enrich_with_docs(hyperparameter, framework, class_name):
     """Enrich hyperparameter with documentation if available"""
     doc_extractor = DocumentationExtractor()
@@ -417,3 +570,55 @@ def transform_to_target_format(metadata_list):
             target_format_list.append(target_entry)
     
     return target_format_list
+def postprocess_metadata(metadata_list):
+    """Post-process metadata to improve framework and parameter detection"""
+    processed_list = []
+    
+    for metadata in metadata_list:
+        # Skip empty metadata
+        if not metadata or not metadata.get("hyperparameters"):
+            continue
+            
+        # Make a copy to avoid modifying the original
+        item = json.loads(json.dumps(metadata))
+        
+        # Fix framework detection if still unknown
+        if item['framework'] == "unknown":
+            code = item['code_snippet'].lower()
+            if 'tensorflow' in code or 'tf.' in code or 'keras' in code:
+                item['framework'] = "tensorflow"
+            elif 'torch' in code or 'nn.' in code:
+                item['framework'] = "pytorch"
+            elif 'sklearn' in code:
+                item['framework'] = "sklearn"
+                
+        # Improve model type detection
+        if item['model_type'] == "Neural Network":
+            code = item['code_snippet'].lower()
+            if 'conv' in code or 'cnn' in code:
+                item['model_type'] = "CNN"
+            elif 'lstm' in code:
+                item['model_type'] = "LSTM"
+            elif 'gru' in code:
+                item['model_type'] = "GRU"
+            elif 'rnn' in code:
+                item['model_type'] = "RNN"
+            elif 'transformer' in code or 'attention' in code:
+                item['model_type'] = "Transformer"
+        
+        # Improve task detection
+        if item['task'] == "general_ml_task":
+            code = item['code_snippet'].lower()
+            if 'classifier' in code or 'classification' in code:
+                item['task'] = "classification"
+            elif 'regressor' in code or 'regression' in code:
+                item['task'] = "regression"
+        
+        # Fix activation parameter types
+        for i, param in enumerate(item['hyperparameters']):
+            if param['name'] == 'activation' and param['param_type'] == 'other':
+                item['hyperparameters'][i]['param_type'] = 'activation_function'
+        
+        processed_list.append(item)
+    
+    return processed_list

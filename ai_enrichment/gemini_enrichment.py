@@ -14,30 +14,33 @@ def initialize_gemini():
         model = PreviewGenerativeModel("gemini-pro")
         return model
 
-def enrich_hyperparameter(model, hyperparameter_data):
+def enrich_hyperparameter(model, hyperparameter_data, full_code=None):
     """Use Gemini to enrich hyperparameter data with explanations and alternatives"""
     param_name = hyperparameter_data["name"]
     param_value = hyperparameter_data["value"]
     code_context = hyperparameter_data["code_context"]
     param_type = hyperparameter_data["param_type"]
     
-    # Get model_type and task from hyperparameter_data instead of undefined 'metadata'
+    # Get model_type and task from hyperparameter_data
     model_type = hyperparameter_data.get("model_type", "Neural Network")
     task = hyperparameter_data.get("task", "general_ml_task")
+    framework = hyperparameter_data.get("framework", "unknown")
     
     # Get official documentation if available
     official_docs = hyperparameter_data.get("official_docs", {})
     official_description = official_docs.get("description", "")
     typical_range = official_docs.get("typical_range", "")
     
+    # Add more complete model analysis
     prompt = f"""
-    As an ML expert, analyze this hyperparameter:
+    As an ML expert, analyze this hyperparameter in detail:
     
     Parameter: {param_name} 
     Current Value: {param_value}
     Parameter Type: {param_type}
+    Framework: {framework}
     Model Type: {model_type}
-    Task: {task}
+    ML Task: {task}
     
     Official Documentation:
     {official_description}
@@ -50,7 +53,10 @@ def enrich_hyperparameter(model, hyperparameter_data):
     ```
     
     Respond with a JSON object ONLY (no explanations outside the JSON) containing:
-    {{
+      "framework": "{framework if framework != 'unknown' else 'Infer the likely framework (tensorflow|pytorch|sklearn|other)'}",
+      "model_type": "{model_type if model_type != 'Neural Network' else 'Infer the specific model architecture'}",
+      "task": "{task if task != 'general_ml_task' else 'Infer the specific ML task'}",
+      "param_type": "{param_type if param_type != 'other' else 'Infer specific parameter category'}",
       "explanation": "A concise (1-2 sentences) explanation of what this parameter controls and its practical impact",
       "typical_range": "A specific numerical or categorical range that's practical for this parameter",
       "alternatives": [
@@ -63,11 +69,9 @@ def enrich_hyperparameter(model, hyperparameter_data):
         "generalization": "poor|good|excellent",
         "stability": "low|medium|high"
       }}
-    }}
     
-    Incorporate information from the official documentation when relevant.
+    Incorporate information from the official documentation when relevant. Be as specific as possible.
     """
-    
     
     try:
         # Call Gemini and get result

@@ -1,0 +1,236 @@
+{
+  "id": "te_891c9a31",
+  "framework": "tensorflow",
+  "source_url": "https://github.com/google/uncertainty-baselines/blob/master/uncertainty_baselines/models/bert_sngp.py",
+  "hyperparameters": [
+    {
+      "name": "epsilon",
+      "value": "1e-12",
+      "line_number": 176,
+      "char_start": 51,
+      "char_end": 56,
+      "code_context": "        **self._common_kwargs)\n    self._output_dropout = tf.keras.layers.Dropout(rate=self._dropout)\n    # Use float32 in layernorm for numeric stability.\n    self._output_layer_norm = tf.keras.layers.LayerNormalization(\n        name='output_layer_norm', axis=-1, epsilon=1e-12, dtype=tf.float32)\n\n    super().build(input_shape)\n\n  def call(self,\n           inputs: tf.Tensor,",
+      "param_type": "optimizer",
+      "class_name": "LayerNormalization",
+      "model_type": "Transformer",
+      "task": "sequence_prediction",
+      "framework": "tensorflow",
+      "explanation": "The epsilon parameter controls the numerical stability of the layer normalization layer by adding a small value to the denominator during division. This helps to prevent division by zero errors and improves the overall stability of the model.",
+      "typical_range": "(1e-5, 1e-12)",
+      "alternatives": [
+        {
+          "value": "1e-6",
+          "scenario": "For moderate stability"
+        },
+        {
+          "value": "1e-8",
+          "scenario": "For higher stability"
+        },
+        {
+          "value": "1e-10",
+          "scenario": "For very high stability with potential performance impact"
+        }
+      ],
+      "impact": {
+        "convergence_speed": "medium",
+        "generalization": "good",
+        "stability": "high"
+      }
+    },
+    {
+      "name": "units",
+      "value": "self._pooled_output_dim",
+      "line_number": 423,
+      "char_start": 14,
+      "char_end": 37,
+      "code_context": "\n    # Define the pooler layer (i.e., the output layer), and optionally apply\n    # spectral normalization.\n    self._pooler_layer = tf.keras.layers.Dense(\n        units=self._pooled_output_dim,\n        activation='tanh',\n        kernel_initializer=self._pooler_layer_initializer,\n        name='pooler_transform')\n    if use_spec_norm_plr:\n      self._pooler_layer = ed.layers.SpectralNormalization(",
+      "param_type": "architecture",
+      "class_name": "Dense",
+      "model_type": "Transformer",
+      "task": "sequence_prediction",
+      "framework": "tensorflow",
+      "explanation": "The `units` hyperparameter controls the number of neurons in the output layer of a Transformer model. This determines the dimensionality of the model's output representations, which influences the expressiveness and complexity of the learned representations.",
+      "typical_range": "[768, 1024]",
+      "alternatives": [
+        {
+          "value": "768",
+          "scenario": "For efficient inference and lower computational cost"
+        },
+        {
+          "value": "1024",
+          "scenario": "For improved accuracy and expressive power, especially with large datasets"
+        }
+      ],
+      "impact": {
+        "convergence_speed": "medium",
+        "generalization": "good",
+        "stability": "high"
+      }
+    },
+    {
+      "name": "activation",
+      "value": "tanh",
+      "line_number": 424,
+      "char_start": 19,
+      "char_end": 23,
+      "code_context": "    # Define the pooler layer (i.e., the output layer), and optionally apply\n    # spectral normalization.\n    self._pooler_layer = tf.keras.layers.Dense(\n        units=self._pooled_output_dim,\n        activation='tanh',\n        kernel_initializer=self._pooler_layer_initializer,\n        name='pooler_transform')\n    if use_spec_norm_plr:\n      self._pooler_layer = ed.layers.SpectralNormalization(\n          self._pooler_layer,",
+      "param_type": "activation_function",
+      "class_name": "Dense",
+      "model_type": "Transformer",
+      "task": "sequence_prediction",
+      "framework": "tensorflow",
+      "explanation": "The `'tanh'` activation function introduces non-linearity to the output of the 'pooler_layer'. It restricts the output values between -1 and 1, potentially improving model performance in sequence prediction tasks by adding expressiveness while controlling the magnitude of activations.",
+      "typical_range": "[-1, 1]",
+      "alternatives": [
+        {
+          "value": "'relu'",
+          "scenario": "For faster convergence and potential improvement in training speed"
+        },
+        {
+          "value": "'softmax'",
+          "scenario": "For multi-class sequence classification tasks, where the output needs to represent a probability distribution"
+        }
+      ],
+      "impact": {
+        "convergence_speed": "medium",
+        "generalization": "good",
+        "stability": "high"
+      }
+    },
+    {
+      "name": "hidden_size",
+      "value": "bert_config.hidden_size",
+      "line_number": 475,
+      "char_start": 18,
+      "char_end": 41,
+      "code_context": "  \"\"\"\n  embedding_cfg = dict(\n      vocab_size=bert_config.vocab_size,\n      type_vocab_size=bert_config.type_vocab_size,\n      hidden_size=bert_config.hidden_size,\n      max_seq_length=bert_config.max_position_embeddings,\n      initializer=tf.keras.initializers.TruncatedNormal(\n          stddev=bert_config.initializer_range),\n      dropout_rate=bert_config.hidden_dropout_prob,\n  )",
+      "param_type": "architecture",
+      "class_name": null,
+      "model_type": "Transformer",
+      "task": "sequence_prediction",
+      "framework": "tensorflow",
+      "explanation": "The hidden_size parameter controls the dimensionality of the output vectors from the Transformer's encoders. It determines the complexity of the representations learned by the model and impacts its expressive power. Increasing the hidden size usually improves performance but also increases training time and memory consumption.",
+      "typical_range": "[128, 1024]",
+      "alternatives": [
+        {
+          "value": "512",
+          "scenario": "Good starting point for most tasks"
+        },
+        {
+          "value": "768",
+          "scenario": "Higher complexity for improved performance"
+        },
+        {
+          "value": "1024",
+          "scenario": "Even higher complexity for demanding tasks (more data required)"
+        }
+      ],
+      "impact": {
+        "convergence_speed": "medium",
+        "generalization": "good",
+        "stability": "high"
+      }
+    },
+    {
+      "name": "units",
+      "value": "num_classes",
+      "line_number": 563,
+      "char_start": 16,
+      "char_end": 27,
+      "code_context": "      # (which is often suggested by the theoretical literature).\n      # The reason is deep BERT model is sensitive to the scaling of the\n      # initializers.\n      self.classifier = ed.layers.RandomFeatureGaussianProcess(\n          units=num_classes,\n          scale_random_features=False,\n          use_custom_random_features=True,\n          kernel_initializer=initializer,\n          custom_random_features_initializer=(\n              tf.keras.initializers.RandomNormal(mean=0.0, stddev=0.05)),",
+      "param_type": "architecture",
+      "class_name": "RandomFeatureGaussianProcess",
+      "model_type": "Transformer",
+      "task": "sequence_prediction",
+      "framework": "tensorflow",
+      "explanation": "The parameter `units` in a Transformer model defines the number of output nodes in the final layer, which corresponds to the number of classes in the classification task. This parameter directly controls the output dimension of the model and determines the number of possible predictions it can make.",
+      "typical_range": "The typical range for `units` is directly related to the number of classes in the specific sequence prediction task. For example, if the task involves classifying text into 10 categories, the `units` parameter would be set to 10.",
+      "alternatives": [],
+      "impact": {
+        "convergence_speed": "medium",
+        "generalization": "good",
+        "stability": "high"
+      }
+    },
+    {
+      "name": "activation",
+      "value": "None",
+      "line_number": 585,
+      "char_start": 23,
+      "char_end": 27,
+      "code_context": "      outputs = [outputs]\n      for head_id in range(1, num_heads):\n        additional_outputs = tf.keras.layers.Dense(\n            num_classes,\n            activation=None,\n            kernel_initializer=initializer,\n            name=f'predictions/transform/logits_{head_id}')(\n                cls_output)\n\n        outputs.append(additional_outputs)",
+      "param_type": "activation_function",
+      "class_name": "Dense",
+      "model_type": "Transformer",
+      "task": "sequence_prediction",
+      "framework": "tensorflow",
+      "explanation": "The activation function applied to the output layer of the transformer network before making predictions. It determines the non-linearity of the model and affects the model's ability to learn complex relationships in the data.",
+      "typical_range": "relu, tanh, sigmoid, softmax",
+      "alternatives": [
+        {
+          "value": "relu",
+          "scenario": "Used when dealing with positive outputs, often preferred for its computational efficiency."
+        },
+        {
+          "value": "tanh",
+          "scenario": "Used when the output values need to be centered around zero, improving gradient flow."
+        },
+        {
+          "value": "sigmoid",
+          "scenario": "Used when predicting probabilities, as the output values range between 0 and 1."
+        },
+        {
+          "value": "softmax",
+          "scenario": "Required for multi-class classification, normalizes output values to a probability distribution."
+        },
+        {
+          "value": "None",
+          "scenario": "No activation function is applied, allowing for a more linear model but potentially affecting performance."
+        }
+      ],
+      "impact": {
+        "convergence_speed": "medium",
+        "generalization": "good",
+        "stability": "medium"
+      }
+    },
+    {
+      "name": "num_heads",
+      "value": "num_heads",
+      "line_number": 624,
+      "char_start": 16,
+      "char_end": 25,
+      "code_context": "  # Build classification model.\n  sngp_bert_model = BertGaussianProcessClassifier(\n      sngp_bert_encoder,\n      num_classes=num_classes,\n      num_heads=num_heads,\n      initializer=last_layer_initializer,\n      dropout_rate=bert_config.hidden_dropout_prob,\n      use_gp_layer=use_gp_layer,\n      gp_layer_kwargs=gp_layer_kwargs)\n",
+      "param_type": "architecture",
+      "class_name": null,
+      "model_type": "Transformer",
+      "task": "sequence_prediction",
+      "framework": "tensorflow",
+      "explanation": "The number of heads within the multi-headed attention mechanism, controlling the depth of feature representation and model expressiveness.",
+      "typical_range": "1-16",
+      "alternatives": [
+        {
+          "value": "1",
+          "scenario": "Compact model size, efficient training"
+        },
+        {
+          "value": "8",
+          "scenario": "Balanced performance"
+        },
+        {
+          "value": "16",
+          "scenario": "Rich feature representation, potential overfitting"
+        }
+      ],
+      "impact": {
+        "convergence_speed": "slow (larger values)",
+        "generalization": "good (medium values)",
+        "stability": "high (medium values)"
+      }
+    }
+  ],
+  "model_type": "Transformer",
+  "task": "sequence_prediction",
+  "dataset_size": "unspecified",
+  "code_snippet": "# coding=utf-8\n# Copyright 2022 The Uncertainty Baselines Authors.\n#\n# Licensed under the Apache License, Version 2.0 (the \"License\");\n# you may not use this file except in compliance with the License.\n# You may obtain a copy of the License at\n#\n#     http://www.apache.org/licenses/LICENSE-2.0\n#\n# Unless required by applicable law or agreed to in writing, software\n# distributed under the License is distributed on an \"AS IS\" BASIS,\n# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n# See the License for the specific language governing permissions and\n# limitations under the License.\n\n\"\"\"SNGP with BERT encoder.\n\nSpectral-normalized neural GP (SNGP) [1] is a simple method to improve\na deterministic neural network's uncertainty by applying spectral\nnormalization to the hidden layers, and then replace the dense output layer\nwith a Gaussian process layer.\n\n## References:\n\n[1]: Jeremiah Liu et al. Simple and Principled Uncertainty Estimation with\n     Deterministic Deep Learning via Distance Awareness.\n     _arXiv preprint arXiv:2006.10108_, 2020.\n     https://arxiv.org/abs/2006.10108\n\n[2]: Ashish Vaswani et al. Attention Is All You Need.\n     _Neural Information Processing System_, 2017.\n     https://papers.nips.cc/paper/7181-attention-is-all-you-need\n\"\"\"\nimport functools\n\nfrom typing import Any, Dict, Mapping, Optional\n\nimport edward2 as ed\nimport tensorflow as tf\n\nfrom official.modeling import tf_utils\nfrom official.nlp.bert import configs as bert_configs\nfrom official.nlp.modeling import layers as bert_layers\nfrom official.nlp.modeling import networks as bert_encoder\n\n_EinsumDense = tf.keras.layers.experimental.EinsumDense\n\n# A dict of regex patterns and their replacements. Use to update weight names\n# in a classic pre-trained checkpoint to those in\n# SpectralNormalizedTransformerEncoder.\nCHECKPOINT_REPL_PATTERNS = {\n    '/intermediate': '/feedforward/intermediate',\n    '/output': '/feedforward/output'\n}\n\n\ndef make_spec_norm_dense_layer(**spec_norm_kwargs: Mapping[str, Any]):\n  \"\"\"Defines a spectral-normalized EinsumDense layer.\n\n  Args:\n    **spec_norm_kwargs: Keyword arguments to the SpectralNormalization layer\n      wrapper.\n\n  Returns:\n    (callable) A function that defines a dense layer and wraps it with\n      SpectralNormalization.\n  \"\"\"\n\n  def spec_norm_dense(*dense_args, **dense_kwargs):\n    base_layer = _EinsumDense(*dense_args, **dense_kwargs)\n    # Inhere base_layer name to match with those in a classic BERT checkpoint.\n    return ed.layers.SpectralNormalization(\n        base_layer, inhere_layer_name=True, **spec_norm_kwargs)\n\n  return spec_norm_dense\n\n\nclass SpectralNormalizedFeedforwardLayer(tf.keras.layers.Layer):\n  \"\"\"Two-layer feed-forward network with spectral-normalized dense layers.\n\n  This class implements a drop-in replacement of the feedforward_block module\n  within tensorflow_models.official.nlp.modeling.layers.TransformerScaffold,\n  with additional options for applying spectral normalization to its hidden\n  weights, and for turning off layer normalization.\n\n  The intended use of this class is as below:\n\n  >>> feedforward_cls = functools.partial(\n        SpectralNormalizedFeedforwardLayer,\n        spec_norm_hparams=spec_norm_hparams)\n  >>> common_kwargs = {\n        'kernel_initializer': 'glorot_uniform'\n      }\n  >>> feedforward_cfg = {\n        'inner_dim': 1024,\n        'inner_activation': 'gelu',\n        'dropout': 0.1,\n        'name': 'feedforward',\n      }\n  >>> feedforward_cfg.update(common_kwargs)\n  >>> feedforward_block = feedforward_cls(**feedforward_cfg)\n  \"\"\"\n\n  def __init__(self,\n               inner_dim: int,\n               inner_activation: str,\n               # TODO(yquan): Remove the following 2 unused fields after they\n               # are removed from TransformerScaffold.py\n               intermediate_size: int,\n               intermediate_activation: str,\n               dropout: float,\n               use_layer_norm: bool = True,\n               use_spec_norm: bool = False,\n               spec_norm_kwargs: Optional[Mapping[str, Any]] = None,\n               name: str = 'feedforward',\n               **common_kwargs: Mapping[str, Any]):\n    \"\"\"Initializer.\n\n    The arguments corresponds to the keyword arguments in feedforward_cls\n    in the TransformerScaffold class.\n\n    Args:\n      inner_dim: Size of the intermediate layer.\n      inner_activation: Activation function to be used for the intermediate\n        layer.\n      intermediate_size (to-be-removed): Same as inner_dim.\n      intermediate_activation (to-be-removed): Same as inner_activation.\n      dropout: Dropout rate.\n      use_layer_norm: Whether to use layer normalization.\n      use_spec_norm: Whether to use spectral normalization.\n      spec_norm_kwargs: Keyword arguments to the spectral normalization layer.\n      name: Layer name.\n      **common_kwargs: Other common keyword arguments for the hidden dense\n        layers.\n    \"\"\"\n    super().__init__(name=name)\n    self._inner_dim = inner_dim\n    self._inner_activation = inner_activation\n    self._dropout = dropout\n    self._use_layer_norm = use_layer_norm\n    self._use_spec_norm = use_spec_norm\n    self._spec_norm_kwargs = spec_norm_kwargs\n    self._common_kwargs = common_kwargs\n\n    # Defines the EinsumDense layer.\n    if self._use_spec_norm:\n      self.einsum_dense_layer = make_spec_norm_dense_layer(**spec_norm_kwargs)\n    else:\n      self.einsum_dense_layer = _EinsumDense\n\n  def build(self, input_shape: tf.TensorShape) -> None:\n    hidden_size = input_shape.as_list()[-1]\n\n    self._intermediate_dense = self.einsum_dense_layer(\n        'abc,cd->abd',\n        output_shape=(None, self._inner_dim),\n        bias_axes='d',\n        name='intermediate',\n        **self._common_kwargs)\n    policy = tf.keras.mixed_precision.global_policy()\n    if policy.name == 'mixed_bfloat16':\n      # bfloat16 causes BERT with the LAMB optimizer to not converge\n      # as well, so we use float32.\n      policy = tf.float32\n    self._intermediate_activation_layer = tf.keras.layers.Activation(\n        self._inner_activation, dtype=policy)\n    self._output_dense = self.einsum_dense_layer(\n        'abc,cd->abd',\n        output_shape=(None, hidden_size),\n        bias_axes='d',\n        name='output',\n        **self._common_kwargs)\n    self._output_dropout = tf.keras.layers.Dropout(rate=self._dropout)\n    # Use float32 in layernorm for numeric stability.\n    self._output_layer_norm = tf.keras.layers.LayerNormalization(\n        name='output_layer_norm', axis=-1, epsilon=1e-12, dtype=tf.float32)\n\n    super().build(input_shape)\n\n  def call(self,\n           inputs: tf.Tensor,\n           training: Optional[bool] = None) -> tf.Tensor:\n    intermediate_output = self._intermediate_dense(inputs)\n    intermediate_output = self._intermediate_activation_layer(\n        intermediate_output)\n    layer_output = self._output_dense(intermediate_output)\n    layer_output = self._output_dropout(layer_output, training=training)\n    # During mixed precision training, attention_output is from layer norm\n    # and is always fp32 for now. Cast layer_output to fp32 for the subsequent\n    # add.\n    layer_output = tf.cast(layer_output, tf.float32)\n    residual_output = layer_output + inputs\n\n    if self._use_layer_norm:\n      return self._output_layer_norm(residual_output)\n    return residual_output\n\n  def get_config(self) -> Dict[str, Any]:\n    config = super().get_config()\n    config.update({\n        'inner_dim': self._inner_dim,\n        'inner_activation': self._inner_activation,\n        'intermediate_size': self._inner_dim,\n        'intermediate_activation': self._inner_activation,\n        'dropout': self._dropout,\n        'use_layer_norm': self._use_layer_norm,\n        'use_spec_norm': self._use_spec_norm,\n        'spec_norm_kwargs': self._spec_norm_kwargs\n    })\n    config.update(self._common_kwargs)\n    return config\n\n\nclass SpectralNormalizedMultiHeadAttention(tf.keras.layers.MultiHeadAttention):\n  \"\"\"Multi-head attention with spectral-normalized dense layers.\n\n  This is an implementation of multi-headed attention layer [2] with the option\n  to replace the original EinsumDense layer with its spectral-normalized\n  counterparts.\n  \"\"\"\n\n  def __init__(self,\n               use_spec_norm: bool = False,\n               spec_norm_kwargs: Optional[Dict[str, Any]] = None,\n               **kwargs: Dict[str, Any]):\n    super().__init__(**kwargs)\n    self._use_spec_norm = use_spec_norm\n    self._spec_norm_kwargs = spec_norm_kwargs\n    self._spec_norm_dense_layer = make_spec_norm_dense_layer(**spec_norm_kwargs)\n\n  def _update_einsum_dense(\n      self, einsum_dense_layer: tf.keras.layers.Layer) -> tf.keras.layers.Layer:\n    \"\"\"Updates the EinsumDense layer to its spectral-normalized counterparts.\"\"\"\n    if not self._use_spec_norm:\n      return einsum_dense_layer\n\n    # Overwrites EinsumDense using the same arguments.\n    einsum_dense_kwargs = einsum_dense_layer.get_config()\n    return self._spec_norm_dense_layer(**einsum_dense_kwargs)\n\n  def _build_from_signature(self,\n                            query: tf.Tensor,\n                            value: tf.Tensor,\n                            key: Optional[tf.Tensor] = None):\n    \"\"\"Builds layers and variables.\n\n    This function overwrites the default _build_from_signature to build dense\n    layers from self.einsum_dense_layer. Once the method is called,\n    self._built_from_signature will be set to True.\n\n    Args:\n      query: query tensor or TensorShape.\n      value: value tensor or TensorShape.\n      key: key tensor or TensorShape.\n    \"\"\"\n    super()._build_from_signature(query, value, key)  # pytype: disable=attribute-error  # typed-keras\n    # Overwrites EinsumDense layers.\n    # TODO(b/168256394): Enable spectral normalization also for key, query and\n    # value layers in the self-attention module.\n    self._output_dense = self._update_einsum_dense(self._output_dense)\n\n  def get_config(self):\n    config = super().get_config()\n    config['use_spec_norm'] = self._use_spec_norm\n    config['spec_norm_kwargs'] = self._spec_norm_kwargs\n    return config\n\n\nclass SpectralNormalizedTransformer(bert_layers.TransformerScaffold):\n  \"\"\"Transformer layer with spectral-normalized dense layers.\"\"\"\n\n  def __init__(self,\n               use_layer_norm_att: bool = True,\n               use_layer_norm_ffn: bool = True,\n               use_spec_norm_att: bool = False,\n               use_spec_norm_ffn: bool = False,\n               spec_norm_kwargs: Optional[Mapping[str, Any]] = None,\n               **kwargs):\n    \"\"\"Initializer.\n\n    Args:\n      use_layer_norm_att: Whether to use layer normalization in the attention\n        layer.\n      use_layer_norm_ffn: Whether to use layer normalization in the feedforward\n        layer.\n      use_spec_norm_att: Whether to use spectral normalization in the attention\n        layer.\n      use_spec_norm_ffn: Whether to use spectral normalization in the\n        feedforward layer.\n      spec_norm_kwargs: Keyword arguments to the spectral normalization layer.\n      **kwargs: Additional keyword arguments to TransformerScaffold.\n    \"\"\"\n    self._use_layer_norm_att = use_layer_norm_att\n    self._use_layer_norm_ffn = use_layer_norm_ffn\n    self._use_spec_norm_att = use_spec_norm_att\n    self._use_spec_norm_ffn = use_spec_norm_ffn\n    self._spec_norm_kwargs = spec_norm_kwargs\n\n    feedforward_cls = functools.partial(\n        SpectralNormalizedFeedforwardLayer,\n        use_layer_norm=self._use_layer_norm_ffn,\n        use_spec_norm=self._use_spec_norm_ffn,\n        spec_norm_kwargs=self._spec_norm_kwargs)\n\n    attention_cls = functools.partial(\n        SpectralNormalizedMultiHeadAttention,\n        use_spec_norm=self._use_spec_norm_att,\n        spec_norm_kwargs=self._spec_norm_kwargs)\n\n    super().__init__(\n        feedforward_cls=feedforward_cls, attention_cls=attention_cls, **kwargs)\n\n  def call(self, inputs):\n    \"\"\"Overwrites default call function to allow diabling layernorm.\"\"\"\n    if isinstance(inputs, (list, tuple)) and len(inputs) == 2:\n      input_tensor, attention_mask = inputs\n    else:\n      input_tensor, attention_mask = (inputs, None)\n\n    attention_output = self._attention_layer(\n        query=input_tensor, value=input_tensor, attention_mask=attention_mask)\n    attention_output = self._attention_dropout(attention_output)\n    attention_output = input_tensor + attention_output\n    if self._use_layer_norm_att:\n      attention_output = self._attention_layer_norm(attention_output)\n\n    if self._feedforward_block is None:\n      intermediate_output = self._intermediate_dense(attention_output)\n      intermediate_output = self._intermediate_activation_layer(\n          intermediate_output)\n      layer_output = self._output_dense(intermediate_output)\n      layer_output = self._output_dropout(layer_output)\n      # During mixed precision training, attention_output is from layer norm\n      # and is always fp32 for now. Cast layer_output to fp32 for the subsequent\n      # add.\n      layer_output = tf.cast(layer_output, tf.float32)\n      layer_output = self._output_layer_norm(layer_output + attention_output)\n    else:\n      layer_output = self._feedforward_block(attention_output)\n\n    return layer_output\n\n\nclass SpectralNormalizedTransformerEncoder(bert_encoder.EncoderScaffold):\n  \"\"\"Spectral-normalized Transformer Encoder with default embedding layer.\"\"\"\n\n  def __init__(\n      self,\n      use_spec_norm_att: bool = False,\n      use_spec_norm_ffn: bool = False,\n      use_spec_norm_plr: bool = False,\n      use_layer_norm_att: bool = True,\n      use_layer_norm_ffn: bool = True,\n      # A dict of kwargs to pass to the Transformer class.\n      hidden_cfg: Optional[Dict[str, Any]] = None,\n      **kwargs: Mapping[str, Any]):\n    \"\"\"Initializer.\"\"\"\n    hidden_cls = SpectralNormalizedTransformer\n\n    # Add layer normalization arguments to default transformer config.\n    normalization_cfg = {\n        'use_layer_norm_att': use_layer_norm_att,\n        'use_layer_norm_ffn': use_layer_norm_ffn,\n        'use_spec_norm_att': use_spec_norm_att,\n        'use_spec_norm_ffn': use_spec_norm_ffn,\n    }\n\n    if hidden_cfg:\n      hidden_cfg.update(normalization_cfg)\n    else:\n      hidden_cfg = normalization_cfg\n\n    # Intialize default layers.\n    super().__init__(hidden_cls=hidden_cls, hidden_cfg=hidden_cfg, **kwargs)\n\n    # Rebuild BERT model graph using default layers.\n    seq_length = self._embedding_cfg.get('seq_length', None)\n\n    # Create inputs layers.\n    word_ids = tf.keras.layers.Input(\n        shape=(seq_length,), dtype=tf.int32, name='input_word_ids')\n    mask = tf.keras.layers.Input(\n        shape=(seq_length,), dtype=tf.int32, name='input_mask')\n    type_ids = tf.keras.layers.Input(\n        shape=(seq_length,), dtype=tf.int32, name='input_type_ids')\n    inputs = [word_ids, mask, type_ids]\n\n    # Define Input Embeddings Layers.\n    word_embeddings = self._embedding_layer(word_ids)\n    position_embeddings = self._position_embedding_layer(word_embeddings)\n    type_embeddings = self._type_embedding_layer(type_ids)\n\n    embeddings = tf.keras.layers.Add()(\n        [word_embeddings, position_embeddings, type_embeddings])\n    # TODO(jereliu): Add option to disable embedding layer normalization.\n    embeddings = self._embedding_norm_layer(embeddings)\n    embeddings = (\n        tf.keras.layers.Dropout(\n            rate=self._embedding_cfg['dropout_rate'])(embeddings))\n\n    # Define self-attention layers. Rename to match with BERT checkpoint.\n    attention_mask = bert_layers.SelfAttentionMask()([embeddings, mask])\n    data = embeddings\n\n    layer_output_data = []\n    self._hidden_layers = []\n    for i in range(self._num_hidden_instances):\n      layer = hidden_cls(\n          **self._hidden_cfg,\n          name='transformer/layer_%d' % i)  # Rename to match BERT checkpoint.\n      data = layer([data, attention_mask])\n      layer_output_data.append(data)\n      self._hidden_layers.append(layer)\n\n    # Extract BERT encoder output (i.e., the CLS token).\n    first_token_tensor = (\n        tf.keras.layers.Lambda(lambda x: tf.squeeze(x[:, 0:1, :], axis=1))(\n            layer_output_data[-1]))\n\n    # Define the pooler layer (i.e., the output layer), and optionally apply\n    # spectral normalization.\n    self._pooler_layer = tf.keras.layers.Dense(\n        units=self._pooled_output_dim,\n        activation='tanh',\n        kernel_initializer=self._pooler_layer_initializer,\n        name='pooler_transform')\n    if use_spec_norm_plr:\n      self._pooler_layer = ed.layers.SpectralNormalization(\n          self._pooler_layer,\n          inhere_layer_name=True,\n          **hidden_cfg['spec_norm_kwargs'])\n\n    cls_output = self._pooler_layer(first_token_tensor)\n\n    if self._return_all_layer_outputs:\n      outputs = [layer_output_data, cls_output]\n    else:\n      outputs = [layer_output_data[-1], cls_output]\n\n    # Compile model with updated graph.\n    super(bert_encoder.EncoderScaffold, self).__init__(\n        inputs=inputs, outputs=outputs, **self._kwargs)\n\n\ndef get_spectral_normalized_transformer_encoder(\n    bert_config: bert_configs.BertConfig,\n    spec_norm_kwargs: Mapping[str, Any],\n    use_layer_norm_att: bool = True,\n    use_layer_norm_ffn: bool = True,\n    use_spec_norm_att: bool = False,\n    use_spec_norm_ffn: bool = False,\n    use_spec_norm_plr: bool = False) -> SpectralNormalizedTransformerEncoder:\n  \"\"\"Creates a SpectralNormalizedTransformerEncoder from a bert_config.\n\n  Args:\n    bert_config: A 'BertConfig' object.\n    spec_norm_kwargs: Keyword arguments to the spectral normalization layer.\n    use_layer_norm_att: (bool) Whether to apply layer normalization to the\n      attention layer.\n    use_layer_norm_ffn: (bool) Whether to apply layer normalization to the\n      feedforward layer.\n    use_spec_norm_att: (bool) Whether to apply spectral normalization to the\n      attention layer.\n    use_spec_norm_ffn: (bool) Whether to apply spectral normalization to the\n      feedforward layer.\n    use_spec_norm_plr: (bool) Whether to apply spectral normalization to the\n      final pooler layer for CLS token.\n\n  Returns:\n    A SpectralNormalizedTransformerEncoder object.\n  \"\"\"\n  embedding_cfg = dict(\n      vocab_size=bert_config.vocab_size,\n      type_vocab_size=bert_config.type_vocab_size,\n      hidden_size=bert_config.hidden_size,\n      max_seq_length=bert_config.max_position_embeddings,\n      initializer=tf.keras.initializers.TruncatedNormal(\n          stddev=bert_config.initializer_range),\n      dropout_rate=bert_config.hidden_dropout_prob,\n  )\n  hidden_cfg = dict(\n      num_attention_heads=bert_config.num_attention_heads,\n      inner_dim=bert_config.intermediate_size,\n      inner_activation=tf_utils.get_activation(bert_config.hidden_act),\n      dropout_rate=bert_config.hidden_dropout_prob,\n      attention_dropout_rate=bert_config.attention_probs_dropout_prob,\n      kernel_initializer=tf.keras.initializers.TruncatedNormal(\n          stddev=bert_config.initializer_range),\n      spec_norm_kwargs=spec_norm_kwargs,\n  )\n  kwargs = dict(\n      embedding_cfg=embedding_cfg,\n      num_hidden_instances=bert_config.num_hidden_layers,\n      pooled_output_dim=bert_config.hidden_size,\n      pooler_layer_initializer=tf.keras.initializers.TruncatedNormal(\n          stddev=bert_config.initializer_range))\n\n  return SpectralNormalizedTransformerEncoder(\n      use_layer_norm_att=use_layer_norm_att,\n      use_layer_norm_ffn=use_layer_norm_ffn,\n      use_spec_norm_att=use_spec_norm_att,\n      use_spec_norm_ffn=use_spec_norm_ffn,\n      use_spec_norm_plr=use_spec_norm_plr,\n      hidden_cfg=hidden_cfg,\n      **kwargs)\n\n\nclass BertGaussianProcessClassifier(tf.keras.Model):\n  \"\"\"Classifier model based on a Gaussian process with BERT encoder.\"\"\"\n\n  def __init__(self,\n               network: tf.keras.Model,\n               num_classes: int,\n               num_heads: int,\n               gp_layer_kwargs: Dict[str, Any],\n               initializer: Optional[tf.keras.initializers.Initializer] = None,\n               dropout_rate: float = 0.1,\n               use_gp_layer: bool = True,\n               **kwargs: Mapping[str, Any]):\n    \"\"\"Initializer.\n\n    Args:\n      network: A transformer network. This network should output a sequence\n        output and a classification output. Furthermore, it should expose its\n        embedding table via a \"get_embedding_table\" method.\n      num_classes: Number of classes to predict from the classification network.\n      num_heads: Number of additional output heads.\n      gp_layer_kwargs: Keyword arguments to Gaussian process layer.\n      initializer: The initializer (if any) to use in the classification\n        networks. Defaults to a Glorot uniform initializer.\n      dropout_rate: The dropout probability of the cls head.\n      use_gp_layer: Whether to use Gaussian process output layer.\n      **kwargs: Additional keyword arguments.\n    \"\"\"\n    self._self_setattr_tracking = False\n    self._network = network\n    self._config = {\n        'network': network,\n        'num_classes': num_classes,\n        'initializer': initializer,\n        'dropout_rate': dropout_rate,\n        'use_gp_layer': use_gp_layer,\n        'gp_layer_kwargs': gp_layer_kwargs\n    }\n\n    # We want to use the inputs of the passed network as the inputs to this\n    # Model. To do this, we need to keep a handle to the network inputs for use\n    # when we construct the Model object at the end of init.\n    inputs = network.inputs\n\n    # Construct classifier using CLS token of the BERT encoder output.\n    _, cls_output = network(inputs)\n    cls_output = tf.keras.layers.Dropout(rate=dropout_rate)(cls_output)\n\n    # Produce final logits.\n    if use_gp_layer:\n      # We use the stddev=0.05 (i.e., the tf keras default)\n      # for the distribution of the random features instead of stddev=1.\n      # (which is often suggested by the theoretical literature).\n      # The reason is deep BERT model is sensitive to the scaling of the\n      # initializers.\n      self.classifier = ed.layers.RandomFeatureGaussianProcess(\n          units=num_classes,\n          scale_random_features=False,\n          use_custom_random_features=True,\n          kernel_initializer=initializer,\n          custom_random_features_initializer=(\n              tf.keras.initializers.RandomNormal(mean=0.0, stddev=0.05)),\n          **gp_layer_kwargs)\n    else:\n      self.classifier = bert_encoder.Classification(\n          input_width=cls_output.shape[-1],\n          num_classes=num_classes,\n          initializer=initializer,\n          output='logits',\n          name='sentence_prediction')\n    outputs = self.classifier(cls_output)\n\n    # Build additional heads if num_heads > 1.\n    if num_heads > 1:\n      outputs = [outputs]\n      for head_id in range(1, num_heads):\n        additional_outputs = tf.keras.layers.Dense(\n            num_classes,\n            activation=None,\n            kernel_initializer=initializer,\n            name=f'predictions/transform/logits_{head_id}')(\n                cls_output)\n\n        outputs.append(additional_outputs)\n\n    super().__init__(inputs=inputs, outputs=outputs, **kwargs)\n\n\ndef bert_sngp_model(num_classes,\n                    bert_config,\n                    gp_layer_kwargs,\n                    spec_norm_kwargs,\n                    num_heads=1,\n                    use_gp_layer=True,\n                    use_spec_norm_att=True,\n                    use_spec_norm_ffn=True,\n                    use_layer_norm_att=False,\n                    use_layer_norm_ffn=False,\n                    use_spec_norm_plr=False):\n  \"\"\"Creates a BERT SNGP classifier model.\"\"\"\n  last_layer_initializer = tf.keras.initializers.TruncatedNormal(\n      stddev=bert_config.initializer_range)\n\n  # Build encoder model.\n  sngp_bert_encoder = get_spectral_normalized_transformer_encoder(\n      bert_config,\n      spec_norm_kwargs,\n      use_layer_norm_att=use_layer_norm_att,\n      use_layer_norm_ffn=use_layer_norm_ffn,\n      use_spec_norm_att=use_spec_norm_att,\n      use_spec_norm_ffn=use_spec_norm_ffn,\n      use_spec_norm_plr=use_spec_norm_plr)\n\n  # Build classification model.\n  sngp_bert_model = BertGaussianProcessClassifier(\n      sngp_bert_encoder,\n      num_classes=num_classes,\n      num_heads=num_heads,\n      initializer=last_layer_initializer,\n      dropout_rate=bert_config.hidden_dropout_prob,\n      use_gp_layer=use_gp_layer,\n      gp_layer_kwargs=gp_layer_kwargs)\n\n  return sngp_bert_model, sngp_bert_encoder\n"
+}
