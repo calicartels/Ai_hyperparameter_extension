@@ -1,3 +1,8 @@
 google-cloud-bigquery>=2.34.4
-google-auth>=2.6.0
 google-cloud-storage>=2.7.0
+google-auth>=2.6.0
+vertexai>=0.1.0
+astor>=0.8.1
+torch>=1.10.0        # For PyTorch documentation
+tensorflow>=2.8.0     # For TensorFlow documentation
+scikit-learn>=1.0.0   # For scikit-learn documentation

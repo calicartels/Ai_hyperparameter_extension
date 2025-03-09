@@ -1,0 +1,1578 @@
+[
+  {
+    "id": "ml_nn_001",
+    "framework": "unknown",
+    "source_url": "https://github.com/Honkl/general-ai/blob/master/Controller/reinforcement/ddpg/actor_network_bn.py",
+    "code_snippet": "                                          activation=tf.identity)",
+    "hyperparameters": [
+      {
+        "name": "activation",
+        "value": "tf.identity",
+        "line_number": 90,
+        "char_start": 53,
+        "char_end": 64,
+        "param_type": "other",
+        "explanation": "The activation function determines the output of a neuron based on its input. In this case, the activation is set to `tf.identity`, which means there is no transformation of the input. This is typically used in the first layer of a neural network, where the input values are raw data and no transformation is needed.",
+        "typical_range": "The choice of activation function depends on the specific task and data. Common activation functions include `tf.nn.relu`, `tf.nn.sigmoid`, and `tf.nn.tanh`. In this case, since there is no transformation, the typical range is the same as the range of the input data.",
+        "alternatives": [
+          {
+            "value": "tf.nn.relu",
+            "scenario": "Use this activation if expecting positive outputs"
+          },
+          {
+            "value": "tf.nn.sigmoid",
+            "scenario": "Use this activation for outputs between 0 and 1"
+          },
+          {
+            "value": "tf.nn.tanh",
+            "scenario": "Use this activation for outputs between -1 and 1"
+          }
+        ],
+        "impact": {
+          "convergence_speed": "medium",
+          "generalization": "medium",
+          "stability": "high"
+        }
+      }
+    ],
+    "model_type": "Neural Network",
+    "task": "general_ml_task",
+    "dataset_size": "unspecified"
+  },
+  {
+    "id": "ml_nn_002",
+    "framework": "unknown",
+    "source_url": "https://github.com/Honkl/general-ai/blob/master/Controller/reinforcement/ddpg/actor_network_bn.py",
+    "code_snippet": "                                          activation=tf.nn.relu)",
+    "hyperparameters": [
+      {
+        "name": "activation",
+        "value": "tf.nn.relu",
+        "line_number": 93,
+        "char_start": 53,
+        "char_end": 63,
+        "param_type": "other",
+        "explanation": "The activation function determines the output of a neuron in a neural network based on its input. **tf.nn.relu** sets the output to zero for negative inputs and preserves positive inputs. This introduces non-linearity into the network, allowing it to learn complex patterns. In this context, it applies a ReLU activation to the output of the first and second dense layers, enhancing their ability to extract non-linear features from the input data.",
+        "typical_range": "The choice of activation function depends on the specific task and dataset. However, **ReLU** is a common choice for many tasks due to its computational efficiency and tendency to prevent vanishing gradients. Alternatives include **tf.nn.tanh** for output values between -1 and 1, and **tf.nn.sigmoid** for output values between 0 and 1.",
+        "alternatives": [
+          {
+            "value": "tf.nn.tanh",
+            "scenario": "When outputs need to be between -1 and 1, such as in generative tasks"
+          },
+          {
+            "value": "tf.nn.sigmoid",
+            "scenario": "When outputs need to be probabilities between 0 and 1, such as in classification tasks"
+          },
+          {
+            "value": "tf.nn.leaky_relu",
+            "scenario": "When mitigating the \"dying ReLU\" problem, where neurons become inactive for negative inputs"
+          }
+        ],
+        "impact": {
+          "convergence_speed": "medium",
+          "generalization": "good",
+          "stability": "high"
+        }
+      }
+    ],
+    "model_type": "Neural Network",
+    "task": "general_ml_task",
+    "dataset_size": "unspecified"
+  },
+  {
+    "id": "ml_nn_003",
+    "framework": "unknown",
+    "source_url": "https://github.com/Honkl/general-ai/blob/master/Controller/reinforcement/ddpg/actor_network_bn.py",
+    "code_snippet": "                                          activation=tf.nn.relu)",
+    "hyperparameters": [
+      {
+        "name": "activation",
+        "value": "tf.nn.relu",
+        "line_number": 96,
+        "char_start": 53,
+        "char_end": 63,
+        "param_type": "other",
+        "explanation": "The activation function determines how the model's output is transformed, impacting the model's response to inputs and its overall behavior. This parameter defines which activation function to use in the model.",
+        "typical_range": "tf.nn.relu, tf.nn.tanh, tf.nn.LeakyReLU, tf.nn.sigmoid",
+        "alternatives": [
+          {
+            "value": "tf.nn.relu",
+            "scenario": "Non-linear activation, good for general use"
+          },
+          {
+            "value": "tf.nn.tanh",
+            "scenario": "Limits output between -1 and 1, useful for gradient-based models"
+          },
+          {
+            "value": "tf.nn.LeakyReLU",
+            "scenario": "Combines ReLU and linear properties, helpful for avoiding dying ReLU neurons"
+          },
+          {
+            "value": "tf.nn.sigmoid",
+            "scenario": "Outputs values between 0 and 1, useful for tasks with a binary response"
+          }
+        ],
+        "impact": {
+          "convergence_speed": "depends on the chosen activation",
+          "generalization": "depends on the chosen activation",
+          "stability": "depends on the chosen activation"
+        }
+      }
+    ],
+    "model_type": "Neural Network",
+    "task": "general_ml_task",
+    "dataset_size": "unspecified"
+  },
+  {
+    "id": "ml_nn_004",
+    "framework": "unknown",
+    "source_url": "https://github.com/Honkl/general-ai/blob/master/Controller/reinforcement/ddpg/actor_network_bn.py",
+    "code_snippet": "                                          activation=tf.identity)",
+    "hyperparameters": [
+      {
+        "name": "activation",
+        "value": "tf.identity",
+        "line_number": 110,
+        "char_start": 53,
+        "char_end": 64,
+        "param_type": "other",
+        "explanation": "The `activation` parameter in this context determines the type of non-linear transformation applied to the output of a layer in the neural network. Here, it is set to `tf.identity`, which applies no transformation, effectively making the layer linear.",
+        "typical_range": "Common activation functions include: \n* `tf.nn.relu`: Rectified Linear Unit, outputs the input directly if it's positive, zero otherwise. Useful for avoiding vanishing gradients. \n* `tf.nn.sigmoid`: Outputs a value between 0 and 1, often used in binary classification tasks. \n* `tf.nn.tanh`: Outputs a value between -1 and 1, suitable for regression tasks. \nChoosing the appropriate activation function depends on the specific task and data.",
+        "alternatives": [
+          {
+            "value": "tf.nn.relu",
+            "scenario": "When dealing with vanishing gradients or aiming for faster convergence."
+          },
+          {
+            "value": "tf.nn.sigmoid",
+            "scenario": "For binary classification tasks where the output should be between 0 and 1."
+          },
+          {
+            "value": "tf.nn.tanh",
+            "scenario": "For regression tasks where the output values can range from -1 to 1."
+          }
+        ],
+        "impact": {
+          "convergence_speed": "slow",
+          "generalization": "medium",
+          "stability": "high"
+        }
+      }
+    ],
+    "model_type": "Neural Network",
+    "task": "general_ml_task",
+    "dataset_size": "unspecified"
+  },
+  {
+    "id": "ml_nn_005",
+    "framework": "unknown",
+    "source_url": "https://github.com/Honkl/general-ai/blob/master/Controller/reinforcement/ddpg/actor_network_bn.py",
+    "code_snippet": "                                          activation=tf.nn.relu)",
+    "hyperparameters": [
+      {
+        "name": "activation",
+        "value": "tf.nn.relu",
+        "line_number": 114,
+        "char_start": 53,
+        "char_end": 63,
+        "param_type": "other",
+        "explanation": "The activation function applied to the output of each layer in the neural network. ReLU activates neurons by setting negative values to zero, introducing non-linearity and improving model expressiveness. However, it might cause the \"dying ReLU\" problem, where neurons stop learning due to zero gradients.",
+        "typical_range": "Common activation functions include ReLU, sigmoid, tanh, and Leaky ReLU. The choice depends on the specific task and model architecture.",
+        "alternatives": [
+          {
+            "value": "tf.nn.sigmoid",
+            "scenario": "Classification tasks with binary outputs"
+          },
+          {
+            "value": "tf.nn.tanh",
+            "scenario": "Regression tasks or tasks with outputs between -1 and 1"
+          },
+          {
+            "value": "tf.nn.leaky_relu",
+            "scenario": "Alleviating the dying ReLU problem by introducing a small non-zero gradient for negative values"
+          }
+        ],
+        "impact": {
+          "convergence_speed": "fast",
+          "generalization": "good",
+          "stability": "medium"
+        }
+      }
+    ],
+    "model_type": "Neural Network",
+    "task": "general_ml_task",
+    "dataset_size": "unspecified"
+  },
+  {
+    "id": "ml_nn_006",
+    "framework": "unknown",
+    "source_url": "https://github.com/Honkl/general-ai/blob/master/Controller/reinforcement/ddpg/actor_network_bn.py",
+    "code_snippet": "                                          activation=tf.nn.relu)",
+    "hyperparameters": [
+      {
+        "name": "activation",
+        "value": "tf.nn.relu",
+        "line_number": 117,
+        "char_start": 53,
+        "char_end": 63,
+        "param_type": "other",
+        "explanation": "The activation function determines the output of a neuron based on its input. tf.nn.relu (Rectified Linear Unit) sets the output to 0 when the input is below 0, and to the input itself when the input is 0 or positive. This helps prevent vanishing gradients and speeds up training, but can also lead to instability in some cases.",
+        "typical_range": "[0, infinity)",
+        "alternatives": [
+          {
+            "value": "tf.nn.sigmoid",
+            "scenario": "For binary classification tasks"
+          },
+          {
+            "value": "tf.nn.tanh",
+            "scenario": "When output needs to be centered around zero"
+          },
+          {
+            "value": "tf.nn.leaky_relu",
+            "scenario": "Addresses the dying ReLU problem, where neurons get stuck in an inactive state"
+          }
+        ],
+        "impact": {
+          "convergence_speed": "fast",
+          "generalization": "good",
+          "stability": "medium"
+        }
+      }
+    ],
+    "model_type": "Neural Network",
+    "task": "general_ml_task",
+    "dataset_size": "unspecified"
+  },
+  {
+    "id": "ml_cnn_001",
+    "framework": "unknown",
+    "source_url": "https://github.com/nlholdem/icodoom/blob/master/ICO1/agent/agent1.py",
+    "code_snippet": "        self.fcnet_train_step = tf.train.AdamOptimizer(learning_rate=self.learning_rate).minimize(self.fcloss)",
+    "hyperparameters": [
+      {
+        "name": "learning_rate",
+        "value": "self.learning_rate",
+        "line_number": 119,
+        "char_start": 69,
+        "char_end": 87,
+        "param_type": "optimizer",
+        "explanation": "The learning rate controls the step size taken when adjusting the model's weights during training. A higher learning rate may lead to faster convergence, but also increase the risk of instability and overshooting the optimal solution.",
+        "typical_range": "0.001 to 0.1",
+        "alternatives": [
+          {
+            "value": "0.1",
+            "scenario": "Fast convergence, but may be unstable"
+          },
+          {
+            "value": "0.01",
+            "scenario": "Good balance between speed and stability"
+          },
+          {
+            "value": "0.001",
+            "scenario": "High stability, but convergence may be slow"
+          }
+        ],
+        "impact": {
+          "convergence_speed": "fast",
+          "generalization": "poor",
+          "stability": "low"
+        }
+      }
+    ],
+    "model_type": "CNN",
+    "task": "general_ml_task",
+    "dataset_size": "unspecified"
+  },
+  {
+    "id": "ml_nn_007",
+    "framework": "unknown",
+    "source_url": "https://github.com/chaitjo/personalized-dialog/blob/master/MemN2N-split-memory/single_dialog.py",
+    "code_snippet": "            learning_rate=self.learning_rate, epsilon=self.epsilon)",
+    "hyperparameters": [
+      {
+        "name": "learning_rate",
+        "value": "self.learning_rate",
+        "line_number": 123,
+        "char_start": 26,
+        "char_end": 44,
+        "param_type": "optimizer",
+        "explanation": "The learning rate controls the magnitude of updates to the model's parameters during training. A higher learning rate leads to faster parameter updates but may lead to instability and oscillations, while a lower learning rate leads to slower training but may improve accuracy and generalization.",
+        "typical_range": "0.001 to 0.1",
+        "alternatives": [
+          {
+            "value": "0.01",
+            "scenario": "General purpose, good balance between speed and stability"
+          },
+          {
+            "value": "0.001",
+            "scenario": "Slow training, but may achieve better accuracy"
+          },
+          {
+            "value": "0.1",
+            "scenario": "Fast training with potential instability and oscillations"
+          }
+        ],
+        "impact": {
+          "convergence_speed": "fast",
+          "generalization": "good",
+          "stability": "medium"
+        }
+      }
+    ],
+    "model_type": "Neural Network",
+    "task": "general_ml_task",
+    "dataset_size": "unspecified"
+  },
+  {
+    "id": "ml_nn_008",
+    "framework": "unknown",
+    "source_url": "https://github.com/chaitjo/personalized-dialog/blob/master/MemN2N-split-memory/single_dialog.py",
+    "code_snippet": "                                  optimizer=optimizer, task_id=task_id)",
+    "hyperparameters": [
+      {
+        "name": "optimizer",
+        "value": "optimizer",
+        "line_number": 131,
+        "char_start": 44,
+        "char_end": 53,
+        "param_type": "other",
+        "explanation": "The optimizer determines how the Neural Network's model parameters are updated based on the training data. It dictates the learning rate and algorithm used to minimize the loss function during the training process.",
+        "typical_range": "N/A, as the optimal optimizer depends on the specific model architecture, task, and dataset.",
+        "alternatives": [
+          {
+            "value": "'sgd'",
+            "scenario": "Simple and computationally efficient, good for convex optimization problems."
+          },
+          {
+            "value": "'adam'",
+            "scenario": "Adaptive learning rate, suitable for deep neural networks, often the go-to choice."
+          },
+          {
+            "value": "'rmsprop'",
+            "scenario": "Effective for recurrent neural networks and memory-intensive tasks."
+          }
+        ],
+        "impact": {
+          "convergence_speed": "varies",
+          "generalization": "varies",
+          "stability": "varies"
+        }
+      }
+    ],
+    "model_type": "Neural Network",
+    "task": "general_ml_task",
+    "dataset_size": "unspecified"
+  },
+  {
+    "id": "ml_nn_009",
+    "framework": "unknown",
+    "source_url": "https://github.com/chaitjo/personalized-dialog/blob/master/MemN2N-split-memory/single_dialog.py",
+    "code_snippet": "                      batch_size=FLAGS.batch_size, memory_size=FLAGS.memory_size,",
+    "hyperparameters": [
+      {
+        "name": "batch_size",
+        "value": "FLAGS.batch_size",
+        "line_number": 298,
+        "char_start": 33,
+        "char_end": 49,
+        "param_type": "training",
+        "explanation": "Batch size determines the number of training samples the model processes in one step. Increasing it improves training speed but requires more memory and can potentially reduce performance.",
+        "typical_range": "32-256 for small datasets or deep neural networks, up to 1024 for large image datasets",
+        "alternatives": [
+          {
+            "value": "Smaller values (16 or 32)",
+            "scenario": "Less GPU memory, limited dataset"
+          },
+          {
+            "value": "Larger values (1024 or even 2048)",
+            "scenario": "Large dataset and sufficient GPU memory"
+          },
+          {
+            "value": "Adaptive batch sizes",
+            "scenario": "Dynamically adjusting based on memory constraints"
+          }
+        ],
+        "impact": {
+          "convergence_speed": "fast with larger batches, slow with smaller batches",
+          "generalization": "can decrease with larger batches due to overfitting",
+          "stability": "can fluctuate with large batches, more stable with smaller batches"
+        }
+      }
+    ],
+    "model_type": "Neural Network",
+    "task": "general_ml_task",
+    "dataset_size": "unspecified"
+  },
+  {
+    "id": "ml_nn_010",
+    "framework": "unknown",
+    "source_url": "https://github.com/chaitjo/personalized-dialog/blob/master/MemN2N-split-memory/single_dialog.py",
+    "code_snippet": "                      epochs=FLAGS.epochs, hops=FLAGS.hops, save_vocab=FLAGS.save_vocab,",
+    "hyperparameters": [
+      {
+        "name": "epochs",
+        "value": "FLAGS.epochs",
+        "line_number": 299,
+        "char_start": 29,
+        "char_end": 41,
+        "param_type": "training",
+        "explanation": "Epochs determine the number of times the entire training dataset is passed through the neural network, impacting training duration and model convergence.",
+        "typical_range": "10-1000",
+        "alternatives": [
+          {
+            "value": "10-50",
+            "scenario": "Small datasets or quick experimentation"
+          },
+          {
+            "value": "100-500",
+            "scenario": "Standard training with moderate-sized datasets"
+          },
+          {
+            "value": "500-1000",
+            "scenario": "Large datasets or complex models requiring extensive training"
+          }
+        ],
+        "impact": {
+          "convergence_speed": "medium|slow",
+          "generalization": "good|excellent",
+          "stability": "high"
+        }
+      }
+    ],
+    "model_type": "Neural Network",
+    "task": "general_ml_task",
+    "dataset_size": "unspecified"
+  },
+  {
+    "id": "ml_nn_011",
+    "framework": "unknown",
+    "source_url": "https://github.com/chaitjo/personalized-dialog/blob/master/MemN2N-split-memory/single_dialog.py",
+    "code_snippet": "                      load_vocab=FLAGS.load_vocab, learning_rate=FLAGS.learning_rate,",
+    "hyperparameters": [
+      {
+        "name": "learning_rate",
+        "value": "FLAGS.learning_rate",
+        "line_number": 300,
+        "char_start": 65,
+        "char_end": 84,
+        "param_type": "optimizer",
+        "explanation": "The learning rate controls the step size used to update the model's weights during training. It determines how quickly the model learns from the data. A higher learning rate can lead to faster learning, but may result in instability and divergence. Conversely, a lower learning rate can lead to slower learning, but may improve stability and convergence.",
+        "typical_range": "0.001 to 0.1",
+        "alternatives": [
+          {
+            "value": "0.001",
+            "scenario": "Start with a small learning rate when unsure or for fine-tuning"
+          },
+          {
+            "value": "0.01",
+            "scenario": "Use for deep networks or when encountering instability with higher rates"
+          },
+          {
+            "value": "0.1",
+            "scenario": "Use for simple models or when training data is well-prepared"
+          }
+        ],
+        "impact": {
+          "convergence_speed": "medium",
+          "generalization": "good",
+          "stability": "medium"
+        }
+      }
+    ],
+    "model_type": "Neural Network",
+    "task": "general_ml_task",
+    "dataset_size": "unspecified"
+  },
+  {
+    "id": "ml_tfm_001",
+    "framework": "unknown",
+    "source_url": "https://github.com/chaitjo/personalized-dialog/blob/master/MemN2N/memn2n/memn2n_dialog.py",
+    "code_snippet": "                 optimizer=tf.train.AdamOptimizer(learning_rate=1e-2),",
+    "hyperparameters": [
+      {
+        "name": "learning_rate",
+        "value": "0.01",
+        "line_number": 18,
+        "char_start": 64,
+        "char_end": 68,
+        "param_type": "optimizer",
+        "explanation": "The learning rate controls the step size the optimizer takes in the direction of the gradient during training. A higher learning rate results in faster learning but may lead to instability and divergence. A lower learning rate leads to slower learning but may improve stability and convergence.",
+        "typical_range": "0.001 to 0.1, the current value of 0.01 is within this range.",
+        "alternatives": [
+          {
+            "value": "0.001",
+            "scenario": "For slower learning and better stability, particularly when dealing with complex tasks or noisy data."
+          },
+          {
+            "value": "0.05",
+            "scenario": "For faster learning, especially if the task is less complex or the data is less noisy."
+          }
+        ],
+        "impact": {
+          "convergence_speed": "medium",
+          "generalization": "good",
+          "stability": "medium-high"
+        }
+      }
+    ],
+    "model_type": "Transformer",
+    "task": "general_ml_task",
+    "dataset_size": "unspecified"
+  },
+  {
+    "id": "ml_cnn_002",
+    "framework": "unknown",
+    "source_url": "https://github.com/ram1993/neuralnetwork/blob/master/Tensorflow/CNN.py",
+    "code_snippet": "optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)",
+    "hyperparameters": [
+      {
+        "name": "learning_rate",
+        "value": "learning_rate",
+        "line_number": 95,
+        "char_start": 49,
+        "char_end": 62,
+        "param_type": "optimizer",
+        "explanation": "The learning rate controls the step size the optimizer takes in the direction of the loss function's gradient during training. A higher learning rate leads to faster convergence but can potentially overshoot the optimal solution, while a lower learning rate leads to slower convergence but may result in better generalization.",
+        "typical_range": "0.001 to 0.1",
+        "alternatives": [
+          {
+            "value": "0.001",
+            "scenario": "Fine-tuning a pre-trained model or training with a small dataset"
+          },
+          {
+            "value": "0.01",
+            "scenario": "Standard training with a moderate-sized dataset and learning rate schedule"
+          },
+          {
+            "value": "0.1",
+            "scenario": "Fast training with a large dataset and the risk of overshooting the optimal solution"
+          }
+        ],
+        "impact": {
+          "convergence_speed": "fast to medium",
+          "generalization": "good to excellent",
+          "stability": "medium to high"
+        }
+      }
+    ],
+    "model_type": "CNN",
+    "task": "image_classification",
+    "dataset_size": "small"
+  },
+  {
+    "id": "ml_tfm_002",
+    "framework": "unknown",
+    "source_url": "https://github.com/SwordYork/sequencing/blob/master/ava_nmt/nmt_infer.py",
+    "code_snippet": "                                batch_size=batch_size, buffer_size=96,",
+    "hyperparameters": [
+      {
+        "name": "batch_size",
+        "value": "batch_size",
+        "line_number": 36,
+        "char_start": 43,
+        "char_end": 53,
+        "param_type": "training",
+        "explanation": "The batch size determines the number of samples processed in one training step. It influences computational efficiency and parameter updates. Larger batches typically lead to faster convergence but may require more memory and can lead to instability. For image generation, batch size also affects the diversity of the generated images.",
+        "typical_range": "The optimal batch size for image generation with Transformers can vary significantly depending on the specific model, dataset, and hardware resources. A typical range is between 8 and 256, but it's crucial to experiment and fine-tune for the best performance.",
+        "alternatives": [
+          {
+            "value": "16",
+            "scenario": "Start with a small batch size to check for stability and convergence issues."
+          },
+          {
+            "value": "32 or 64",
+            "scenario": "Use a moderate batch size for faster convergence and reasonable memory consumption."
+          },
+          {
+            "value": "128 or 256",
+            "scenario": "If computational resources allow, consider a larger batch size for potentially better performance."
+          }
+        ],
+        "impact": {
+          "convergence_speed": "Larger batch sizes generally lead to faster convergence.",
+          "generalization": "The impact on generalization depends on the specific model and dataset, but smaller batches may slightly improve generalization.",
+          "stability": "Larger batch sizes can lead to instability during training, especially with limited resources."
+        }
+      }
+    ],
+    "model_type": "Transformer",
+    "task": "image_generation",
+    "dataset_size": "unspecified"
+  },
+  {
+    "id": "ml_tfm_003",
+    "framework": "unknown",
+    "source_url": "https://github.com/SwordYork/sequencing/blob/master/ava_nmt/nmt_infer.py",
+    "code_snippet": "          batch_size=training_configs.batch_size,",
+    "hyperparameters": [
+      {
+        "name": "batch_size",
+        "value": "training_configs.batch_size",
+        "line_number": 166,
+        "char_start": 21,
+        "char_end": 48,
+        "param_type": "training",
+        "explanation": "The batch size determines the amount of data the model processes in each iteration. Larger batch sizes lead to faster training convergence but might require more GPU memory and have lower generalization, especially for smaller datasets.",
+        "typical_range": "[32, 256, 512, 1024]",
+        "alternatives": [
+          {
+            "value": "32",
+            "scenario": "Less GPU memory, smaller datasets"
+          },
+          {
+            "value": "256",
+            "scenario": "Balancing GPU memory with convergence speed and stability"
+          },
+          {
+            "value": "1024",
+            "scenario": "Large datasets, sufficient GPU memory, prioritizing convergence speed"
+          }
+        ],
+        "impact": {
+          "convergence_speed": {
+            "32": "fast",
+            "256": "medium",
+            "1024": "fastest"
+          },
+          "generalization": {
+            "32": "better",
+            "256": "good",
+            "1024": "lower"
+          },
+          "stability": {
+            "32": "lower (more fluctuations)",
+            "256": "medium",
+            "1024": "higher (more predictable)"
+          }
+        }
+      }
+    ],
+    "model_type": "Transformer",
+    "task": "image_generation",
+    "dataset_size": "unspecified"
+  },
+  {
+    "id": "ml_cnn_003",
+    "framework": "unknown",
+    "source_url": "https://github.com/shygiants/ChangeGAN/blob/master/change-gan/change-gan/models/change_gan.py",
+    "code_snippet": "        learning_rate=learning_rate,",
+    "hyperparameters": [
+      {
+        "name": "learning_rate",
+        "value": "learning_rate",
+        "line_number": 112,
+        "char_start": 22,
+        "char_end": 35,
+        "param_type": "optimizer",
+        "explanation": "The learning rate controls the step size taken during gradient descent optimization. A large learning rate accelerates training but risks instability and overshooting the optimal solution, while a small learning rate slows down training but ensures stability.",
+        "typical_range": "0.0001 to 0.1",
+        "alternatives": [
+          {
+            "value": "0.001",
+            "scenario": "Good starting point for general image generation tasks."
+          },
+          {
+            "value": "0.01",
+            "scenario": "Faster training, but may require careful monitoring for stability."
+          },
+          {
+            "value": "0.0001",
+            "scenario": "Slower training, but more stable and reliable."
+          }
+        ],
+        "impact": {
+          "convergence_speed": "fast to slow (depending on the value)",
+          "generalization": "medium to good (can be improved with techniques like learning rate decay)",
+          "stability": "low to high (depending on the value)"
+        }
+      }
+    ],
+    "model_type": "CNN",
+    "task": "image_generation",
+    "dataset_size": "unspecified"
+  },
+  {
+    "id": "ml_cnn_004",
+    "framework": "unknown",
+    "source_url": "https://github.com/shygiants/ChangeGAN/blob/master/change-gan/change-gan/models/change_gan.py",
+    "code_snippet": "        learning_rate=learning_rate,",
+    "hyperparameters": [
+      {
+        "name": "learning_rate",
+        "value": "learning_rate",
+        "line_number": 121,
+        "char_start": 22,
+        "char_end": 35,
+        "param_type": "optimizer",
+        "explanation": "The learning rate controls the step size during gradient descent. It determines how much the model's weights are adjusted after each training step. A higher learning rate may lead to faster convergence but could also make the model less stable and prone to overshoot the minimum. Conversely, a lower learning rate may lead to slower convergence but could improve stability and generalization.",
+        "typical_range": "0.0001 to 0.1",
+        "alternatives": [
+          {
+            "value": "0.001",
+            "scenario": "Fine-tuning a pre-trained model or dealing with highly sensitive data"
+          },
+          {
+            "value": "0.01",
+            "scenario": "General image generation tasks with a moderate amount of data"
+          },
+          {
+            "value": "0.1",
+            "scenario": "Training from scratch on a large dataset or with a simple model architecture"
+          }
+        ],
+        "impact": {
+          "convergence_speed": "fast (for larger learning rates), slow (for smaller learning rates)",
+          "generalization": "good (for smaller learning rates), poor (for larger learning rates)",
+          "stability": "high (for smaller learning rates), low (for larger learning rates)"
+        }
+      }
+    ],
+    "model_type": "CNN",
+    "task": "image_generation",
+    "dataset_size": "unspecified"
+  },
+  {
+    "id": "ml_cnn_005",
+    "framework": "unknown",
+    "source_url": "https://github.com/shygiants/ChangeGAN/blob/master/change-gan/change-gan/models/change_gan.py",
+    "code_snippet": "        learning_rate=learning_rate,",
+    "hyperparameters": [
+      {
+        "name": "learning_rate",
+        "value": "learning_rate",
+        "line_number": 136,
+        "char_start": 22,
+        "char_end": 35,
+        "param_type": "optimizer",
+        "explanation": "The learning rate determines the step size taken by the optimizer in each iteration. It directly affects the convergence speed of the model.",
+        "typical_range": "0.001 to 0.1",
+        "alternatives": [
+          {
+            "value": "0.001",
+            "scenario": "Fine-tuning a pre-trained model"
+          },
+          {
+            "value": "0.01",
+            "scenario": "Training a model from scratch"
+          },
+          {
+            "value": "0.1",
+            "scenario": "Accelerating learning in the early stages"
+          }
+        ],
+        "impact": {
+          "convergence_speed": "fast|medium|slow",
+          "generalization": "poor|good|excellent",
+          "stability": "low|medium|high"
+        }
+      }
+    ],
+    "model_type": "CNN",
+    "task": "image_generation",
+    "dataset_size": "unspecified"
+  },
+  {
+    "id": "ml_cnn_006",
+    "framework": "unknown",
+    "source_url": "https://github.com/shygiants/ChangeGAN/blob/master/change-gan/change-gan/models/change_gan.py",
+    "code_snippet": "        batch_size=batch_size,",
+    "hyperparameters": [
+      {
+        "name": "batch_size",
+        "value": "batch_size",
+        "line_number": 279,
+        "char_start": 19,
+        "char_end": 29,
+        "param_type": "training",
+        "explanation": "Batch size determines the number of training images processed together. Larger batches accelerate training but require more memory.",
+        "typical_range": "32-256",
+        "alternatives": [
+          {
+            "value": "32",
+            "scenario": "Limited memory or small dataset"
+          },
+          {
+            "value": "128",
+            "scenario": "Balanced memory and performance"
+          },
+          {
+            "value": "256",
+            "scenario": "Large dataset and ample memory (GPU)"
+          }
+        ],
+        "impact": {
+          "convergence_speed": "fast",
+          "generalization": "good",
+          "stability": "medium"
+        }
+      }
+    ],
+    "model_type": "CNN",
+    "task": "image_generation",
+    "dataset_size": "unspecified"
+  },
+  {
+    "id": "tf_dnn_001",
+    "framework": "tensorflow",
+    "source_url": "https://github.com/googleforgames/clean-chat/blob/master/components/model/bert/vertex_pipeline/model.py",
+    "code_snippet": "        batch_size=batch_size,",
+    "hyperparameters": [
+      {
+        "name": "batch_size",
+        "value": "batch_size",
+        "line_number": 114,
+        "char_start": 19,
+        "char_end": 29,
+        "param_type": "training",
+        "explanation": "Batch size defines the number of data points processed by the model at each training step. Increasing the batch size can speed up training but may require more memory and potentially reduce generalization performance.",
+        "typical_range": "[8, 256, 512, 1024]",
+        "alternatives": [
+          {
+            "value": "8",
+            "scenario": "Limited GPU memory"
+          },
+          {
+            "value": "256",
+            "scenario": "Default baseline for many tasks"
+          },
+          {
+            "value": "1024",
+            "scenario": "Large datasets on powerful GPUs"
+          }
+        ],
+        "impact": {
+          "convergence_speed": "fast",
+          "generalization": "good",
+          "stability": "medium"
+        }
+      }
+    ],
+    "model_type": "Dense Neural Network",
+    "task": "general_ml_task",
+    "dataset_size": "small"
+  },
+  {
+    "id": "tf_dnn_002",
+    "framework": "tensorflow",
+    "source_url": "https://github.com/googleforgames/clean-chat/blob/master/components/model/bert/vertex_pipeline/model.py",
+    "code_snippet": "    net = tf.keras.layers.Dense(1, activation=None, name='classifier')(net)",
+    "hyperparameters": [
+      {
+        "name": "activation",
+        "value": "None",
+        "line_number": 138,
+        "char_start": 46,
+        "char_end": 50,
+        "param_type": "other",
+        "explanation": "The \"activation\" hyperparameter determines the non-linearity of the model. It is currently set to \"None\", which signifies a linear transformation in the final layer.",
+        "typical_range": "The choice of activation function depends heavily on the task at hand. Common activations include: \n * Sigmoid for binary classification\n * Softmax for multi-class classification\n * ReLU (Rectified Linear Unit) for general purpose tasks\n * Tanh and ELU for regression and other continuous problems\n * Leaky ReLU for addressing the \"dying ReLU\" problem\nUltimately, the optimal activation function should be determined through experimentation on the specific problem and dataset.",
+        "alternatives": [
+          {
+            "value": "relu",
+            "scenario": "Good general-purpose activation"
+          },
+          {
+            "value": "softmax",
+            "scenario": "For multi-class classification"
+          },
+          {
+            "value": "sigmoid",
+            "scenario": "For binary classification"
+          }
+        ],
+        "impact": {
+          "convergence_speed": "medium",
+          "generalization": "Depends on the chosen activation function.",
+          "stability": "medium"
+        }
+      }
+    ],
+    "model_type": "Dense Neural Network",
+    "task": "general_ml_task",
+    "dataset_size": "small"
+  },
+  {
+    "id": "tf_dnn_003",
+    "framework": "tensorflow",
+    "source_url": "https://github.com/googleforgames/clean-chat/blob/master/components/model/bert/vertex_pipeline/model.py",
+    "code_snippet": "    model.compile(optimizer=optimizer,",
+    "hyperparameters": [
+      {
+        "name": "optimizer",
+        "value": "optimizer",
+        "line_number": 148,
+        "char_start": 28,
+        "char_end": 37,
+        "param_type": "other",
+        "explanation": "The optimizer determines how the model updates its parameters to minimize the loss function. In this case, the 'adamw' optimizer is used, which is a variant of Adam specifically designed for training large language models like BERT.",
+        "typical_range": "Commonly used values for the 'adamw' optimizer include a learning rate of 1e-5 to 5e-5 and a weight decay of 0.01.",
+        "alternatives": [
+          {
+            "value": "'sgd'",
+            "scenario": "Use SGD with momentum if you prefer a simpler optimizer or for smaller datasets."
+          },
+          {
+            "value": "'rmsprop'",
+            "scenario": "Use RMSprop if you encounter slow convergence or local minima."
+          },
+          {
+            "value": "'adadelta'",
+            "scenario": "Use Adadelta if you have limited memory or varying learning rates."
+          }
+        ],
+        "impact": {
+          "convergence_speed": "medium",
+          "generalization": "good",
+          "stability": "high"
+        }
+      }
+    ],
+    "model_type": "Dense Neural Network",
+    "task": "general_ml_task",
+    "dataset_size": "small"
+  },
+  {
+    "id": "tf_dnn_004",
+    "framework": "tensorflow",
+    "source_url": "https://github.com/googleforgames/clean-chat/blob/master/components/model/bert/vertex_pipeline/model.py",
+    "code_snippet": "                              tf_transform_output=tf_transform_output,\n                              batch_size=32)\n",
+    "hyperparameters": [
+      {
+        "name": "batch_size",
+        "value": "32",
+        "line_number": 164,
+        "char_start": 41,
+        "char_end": 43,
+        "param_type": "training",
+        "explanation": "The parameter controls the number of samples that the model processes during training at a time. Increasing it can improve the convergence speed, but might also increase memory usage or overfitting.",
+        "typical_range": "8, 16, 32, 64, 128, 256",
+        "alternatives": [
+          {
+            "value": "8",
+            "scenario": "Smaller datasets or models"
+          },
+          {
+            "value": "128",
+            "scenario": "Balance between efficiency and memory consumption"
+          },
+          {
+            "value": "256",
+            "scenario": "Larger datasets or GPUs with ample memory"
+          }
+        ],
+        "impact": {
+          "convergence_speed": "medium or fast",
+          "generalization": "variable depending on data and model",
+          "stability": "medium to high"
+        }
+      }
+    ],
+    "model_type": "Dense Neural Network",
+    "task": "general_ml_task",
+    "dataset_size": "small"
+  },
+  {
+    "id": "tf_dnn_005",
+    "framework": "tensorflow",
+    "source_url": "https://github.com/googleforgames/clean-chat/blob/master/components/model/bert/vertex_pipeline/model.py",
+    "code_snippet": "                             tf_transform_output=tf_transform_output,\n                             batch_size=32)\n",
+    "hyperparameters": [
+      {
+        "name": "batch_size",
+        "value": "32",
+        "line_number": 168,
+        "char_start": 40,
+        "char_end": 42,
+        "param_type": "training",
+        "explanation": "The batch size determines the number of training examples used in each update to the model's parameters. A larger batch size generally leads to faster training but can require more memory and may result in poorer generalization.",
+        "typical_range": "16-256",
+        "alternatives": [
+          {
+            "value": "16",
+            "scenario": "When memory is limited or generalization is critical"
+          },
+          {
+            "value": "64",
+            "scenario": "A common default value for many tasks"
+          },
+          {
+            "value": "256",
+            "scenario": "When resources are plentiful and faster training is desired"
+          }
+        ],
+        "impact": {
+          "convergence_speed": "fast",
+          "generalization": "medium",
+          "stability": "medium"
+        }
+      }
+    ],
+    "model_type": "Dense Neural Network",
+    "task": "general_ml_task",
+    "dataset_size": "small"
+  },
+  {
+    "id": "ml_cnn_007",
+    "framework": "unknown",
+    "source_url": "https://github.com/google-research/deadunits/blob/master/deadunits/generic_convnet.py",
+    "code_snippet": "        setattr(self, l_name, tf.keras.layers.Dense(t[1], activation=None))",
+    "hyperparameters": [
+      {
+        "name": "activation",
+        "value": "None",
+        "line_number": 129,
+        "char_start": 69,
+        "char_end": 73,
+        "param_type": "other",
+        "explanation": "The activation function determines how the output of a neuron is computed from its input. In this case, it's currently set to `None`, indicating the absence of an activation function, which is uncommon for image classification tasks.",
+        "typical_range": "The most commonly used activation functions in image classification include ReLU (Rectified Linear Unit), Leaky ReLU, and Softmax. These typically bring non-linearity, sparsity, or probability-like outputs.",
+        "alternatives": [
+          {
+            "value": "relu",
+            "scenario": "Improves learning speed and sparsity."
+          },
+          {
+            "value": "leaky_relu",
+            "scenario": "Similar to ReLU but mitigates the 'dying ReLU' problem."
+          },
+          {
+            "value": "softmax",
+            "scenario": "Outputs probabilities for multi-class classification."
+          }
+        ],
+        "impact": {
+          "convergence_speed": "medium",
+          "generalization": "unknown",
+          "stability": "unknown"
+        }
+      }
+    ],
+    "model_type": "CNN",
+    "task": "image_classification",
+    "dataset_size": "unspecified"
+  },
+  {
+    "id": "ml_cnn_008",
+    "framework": "unknown",
+    "source_url": "https://github.com/google-research/deadunits/blob/master/deadunits/generic_convnet.py",
+    "code_snippet": "                  tf.keras.layers.Conv2D(t[1], t[2], activation=None, **t[3])))",
+    "hyperparameters": [
+      {
+        "name": "activation",
+        "value": "None",
+        "line_number": 137,
+        "char_start": 64,
+        "char_end": 68,
+        "param_type": "other",
+        "explanation": "This hyperparameter controls the activation function applied to the output of each convolutional layer. Currently, no activation function is applied.",
+        "typical_range": "Popular activation functions include 'relu', 'sigmoid', 'tanh', and 'leaky_relu'.",
+        "alternatives": [
+          {
+            "value": "'relu'",
+            "scenario": "Good default choice for many CNN tasks"
+          },
+          {
+            "value": "'sigmoid'",
+            "scenario": "Suitable for binary classification tasks"
+          },
+          {
+            "value": "'tanh'",
+            "scenario": "Good for recurrent neural networks"
+          }
+        ],
+        "impact": {
+          "convergence_speed": "medium|fast",
+          "generalization": "variable",
+          "stability": "medium"
+        }
+      }
+    ],
+    "model_type": "CNN",
+    "task": "image_classification",
+    "dataset_size": "unspecified"
+  },
+  {
+    "id": "ml_cnn_009",
+    "framework": "unknown",
+    "source_url": "https://github.com/google-research/deadunits/blob/master/deadunits/generic_convnet.py",
+    "code_snippet": "                  wrapper(tf.keras.layers.Dense(t[1], activation=None)))",
+    "hyperparameters": [
+      {
+        "name": "activation",
+        "value": "None",
+        "line_number": 140,
+        "char_start": 65,
+        "char_end": 69,
+        "param_type": "other",
+        "explanation": "The activation function modifies the output of a layer, controlling the firing rate of neurons and introducing non-linearity. It influences how the model learns and predicts classes during training and inference.",
+        "typical_range": [
+          "'relu'",
+          "'sigmoid'",
+          "'tanh'"
+        ],
+        "alternatives": [
+          {
+            "value": "'relu'",
+            "scenario": "Common default for CNNs, encouraging sparsity and faster training"
+          },
+          {
+            "value": "'tanh'",
+            "scenario": "Useful for tasks requiring bounded outputs, like (-1, 1) for pixel values"
+          },
+          {
+            "value": "'sigmoid'",
+            "scenario": "Suitable for binary classification problems with outputs between 0 and 1"
+          }
+        ],
+        "impact": {
+          "convergence_speed": "varies",
+          "generalization": "varies",
+          "stability": "varies"
+        }
+      }
+    ],
+    "model_type": "CNN",
+    "task": "image_classification",
+    "dataset_size": "unspecified"
+  },
+  {
+    "id": "ml_dnn_001",
+    "framework": "unknown",
+    "source_url": "https://github.com/srom/chessbot/blob/master/estimator/train/model.py",
+    "code_snippet": "        hidden_1 = tf.layers.dense(X, HIDDEN_UNITS, activation=tf.nn.elu, name='hidden_1')",
+    "hyperparameters": [
+      {
+        "name": "activation",
+        "value": "tf.nn.elu",
+        "line_number": 55,
+        "char_start": 63,
+        "char_end": 72,
+        "param_type": "other",
+        "explanation": "The activation function determines the output nonlinearity introduced between two fully-connected layers in a neural network. Here, tf.nn.elu (Exponential Linear Units) is used. It has the advantage of being differentiable everywhere and exhibiting better convergence compared to other activation functions. In object detection, the choice of activation function significantly affects the model's ability to learn meaningful features and improve detection accuracy.",
+        "typical_range": "The typical range for activation functions includes 'relu', 'sigmoid', 'tanh', and 'leaky_relu' in addition to 'elu'. The best choice depends on the specific dataset and task. For most applications in object detection, 'relu' or 'elu' tend to perform well due to their non-saturating nature.",
+        "alternatives": [
+          {
+            "value": "'relu'",
+            "scenario": "When computational efficiency is prioritized or the model's training process stalls."
+          },
+          {
+            "value": "'leaky_relu'",
+            "scenario": "When the problem suffers from the vanishing gradient issue or requires faster convergence."
+          },
+          {
+            "value": "'swish'",
+            "scenario": "If experimentation or exploring newer activations is the goal, especially for smaller datasets."
+          }
+        ],
+        "impact": {
+          "convergence_speed": "medium",
+          "generalization": "good",
+          "stability": "high"
+        }
+      }
+    ],
+    "model_type": "Dense Neural Network",
+    "task": "object_detection",
+    "dataset_size": "unspecified"
+  },
+  {
+    "id": "ml_dnn_002",
+    "framework": "unknown",
+    "source_url": "https://github.com/srom/chessbot/blob/master/estimator/train/model.py",
+    "code_snippet": "        hidden_2 = tf.layers.dense(hidden_1, HIDDEN_UNITS, activation=tf.nn.elu, name='hidden_2')",
+    "hyperparameters": [
+      {
+        "name": "activation",
+        "value": "tf.nn.elu",
+        "line_number": 56,
+        "char_start": 70,
+        "char_end": 79,
+        "param_type": "other",
+        "explanation": "The `activation` parameter controls the activation function applied to each neuron in the dense layers. The current value, `tf.nn.elu`, applies the exponential linear unit (ELU) activation function. ELU is known for its ability to speed up convergence and reduce the vanishing gradient problem.",
+        "typical_range": "Common activation functions for dense neural networks include `relu`, `elu`, `sigmoid`, and `tanh`.",
+        "alternatives": [
+          {
+            "value": "tf.nn.relu",
+            "scenario": "When faster convergence and simpler optimization is needed"
+          },
+          {
+            "value": "tf.nn.sigmoid",
+            "scenario": "For binary classification tasks where output values need to be between 0 and 1"
+          },
+          {
+            "value": "tf.nn.tanh",
+            "scenario": "When output values need to be between -1 and 1"
+          }
+        ],
+        "impact": {
+          "convergence_speed": "fast",
+          "generalization": "good",
+          "stability": "medium"
+        }
+      }
+    ],
+    "model_type": "Dense Neural Network",
+    "task": "object_detection",
+    "dataset_size": "unspecified"
+  },
+  {
+    "id": "ml_dnn_003",
+    "framework": "unknown",
+    "source_url": "https://github.com/srom/chessbot/blob/master/estimator/train/model.py",
+    "code_snippet": "        output = tf.layers.dense(hidden_2, 1, activation=None, name='output')",
+    "hyperparameters": [
+      {
+        "name": "activation",
+        "value": "None",
+        "line_number": 57,
+        "char_start": 57,
+        "char_end": 61,
+        "param_type": "other",
+        "explanation": "The activation parameter defines the function applied to the output of a neural network layer. In this case, the output layer for object detection has no activation function, which means the outputs are not transformed before being interpreted as predictions. This can be suitable for tasks where the output values have a natural interpretation, such as bounding boxes or confidence scores.",
+        "typical_range": "Common activation functions for object detection include sigmoid, softmax, ReLU, Leaky ReLU, and ELU.",
+        "alternatives": [
+          {
+            "value": "sigmoid",
+            "scenario": "If output values should be between 0 and 1"
+          },
+          {
+            "value": "softmax",
+            "scenario": "For multi-class classification with mutually exclusive categories"
+          },
+          {
+            "value": "ReLU",
+            "scenario": "To introduce non-linearity and improve network performance"
+          },
+          {
+            "value": "Leaky ReLU",
+            "scenario": "To alleviate the \"dying ReLU\" problem"
+          }
+        ],
+        "impact": {
+          "convergence_speed": "medium",
+          "generalization": "good",
+          "stability": "high"
+        }
+      }
+    ],
+    "model_type": "Dense Neural Network",
+    "task": "object_detection",
+    "dataset_size": "unspecified"
+  },
+  {
+    "id": "ml_dnn_004",
+    "framework": "unknown",
+    "source_url": "https://github.com/srom/chessbot/blob/master/estimator/train/model.py",
+    "code_snippet": "        optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate, epsilon=epsilon)",
+    "hyperparameters": [
+      {
+        "name": "learning_rate",
+        "value": "learning_rate",
+        "line_number": 72,
+        "char_start": 57,
+        "char_end": 70,
+        "param_type": "optimizer",
+        "explanation": "The learning rate controls the step size during gradient descent, determining how much the model updates its weights with each training step. Lower values lead to slower learning but better generalization, while higher values lead to faster learning but potentially poorer generalization.",
+        "typical_range": "0.001 to 0.1",
+        "alternatives": [
+          {
+            "value": "0.1",
+            "scenario": "Fast learning with high risk of divergence."
+          },
+          {
+            "value": "0.01",
+            "scenario": "Moderate learning speed and good generalization."
+          },
+          {
+            "value": "0.001",
+            "scenario": "Slow learning but excellent generalization."
+          }
+        ],
+        "impact": {
+          "convergence_speed": "medium",
+          "generalization": "good",
+          "stability": "medium"
+        }
+      }
+    ],
+    "model_type": "Dense Neural Network",
+    "task": "object_detection",
+    "dataset_size": "unspecified"
+  },
+  {
+    "id": "ml_rnn_001",
+    "framework": "unknown",
+    "source_url": "https://github.com/nayutaya/tensorflow-rnn-sin/blob/master/ex1/basic/rnn.py",
+    "code_snippet": "optimizer = tf.train.GradientDescentOptimizer(learning_rate=learning_rate)",
+    "hyperparameters": [
+      {
+        "name": "learning_rate",
+        "value": "learning_rate",
+        "line_number": 53,
+        "char_start": 60,
+        "char_end": 73,
+        "param_type": "optimizer",
+        "explanation": "The learning rate controls how much the model updates its weights based on the error in its predictions. A higher learning rate can lead to faster convergence but may result in poorer generalization. A lower learning rate can lead to slower convergence but may result in better generalization.",
+        "typical_range": "0.001 to 0.1",
+        "alternatives": [
+          {
+            "value": "0.001",
+            "scenario": "Start with a low learning rate to ensure stability."
+          },
+          {
+            "value": "0.01",
+            "scenario": "Use a moderate learning rate for general applications."
+          },
+          {
+            "value": "0.1",
+            "scenario": "Use a high learning rate for rapid experimentation or when dealing with noisy data."
+          }
+        ],
+        "impact": {
+          "convergence_speed": "fast to slow",
+          "generalization": "poor to excellent",
+          "stability": "low to high"
+        }
+      }
+    ],
+    "model_type": "LSTM",
+    "task": "sequence_prediction",
+    "dataset_size": "unspecified"
+  },
+  {
+    "id": "ml_cnn_010",
+    "framework": "unknown",
+    "source_url": "https://github.com/ucloud/uai-sdk/blob/master/examples/tensorflow/train/imagenet/code/imagenet_main.py",
+    "code_snippet": "          learning_rate=learning_rate, momentum=momentum)",
+    "hyperparameters": [
+      {
+        "name": "learning_rate",
+        "value": "learning_rate",
+        "line_number": 169,
+        "char_start": 24,
+        "char_end": 37,
+        "param_type": "optimizer",
+        "explanation": "The learning rate controls the step size taken in the direction of the loss gradient during training. Lower values lead to smaller updates and slower convergence, but can improve generalization. Higher values can lead to faster convergence, but may cause the model to overshoot the optimal solution and reduce stability.",
+        "typical_range": "Between 0.001 and 0.1, depending on the specific task and dataset.",
+        "alternatives": [
+          {
+            "value": "0.001",
+            "scenario": "For fine-tuning a pre-trained model or for tasks with small datasets."
+          },
+          {
+            "value": "0.01",
+            "scenario": "For training from scratch on a moderate-sized dataset."
+          },
+          {
+            "value": "0.1",
+            "scenario": "For training a large model on a large dataset with a high learning rate schedule."
+          }
+        ],
+        "impact": {
+          "convergence_speed": "medium|fast",
+          "generalization": "good|excellent",
+          "stability": "medium|low"
+        }
+      }
+    ],
+    "model_type": "CNN",
+    "task": "image_classification",
+    "dataset_size": "large"
+  },
+  {
+    "id": "ml_cnn_011",
+    "framework": "unknown",
+    "source_url": "https://github.com/ucloud/uai-sdk/blob/master/examples/tensorflow/train/imagenet/code/imagenet_main.py",
+    "code_snippet": "          learning_rate=learning_rate, momentum=momentum)",
+    "hyperparameters": [
+      {
+        "name": "momentum",
+        "value": "momentum",
+        "line_number": 169,
+        "char_start": 48,
+        "char_end": 56,
+        "param_type": "optimizer",
+        "explanation": "Momentum adds a fraction of the previous update to the current update, accelerating convergence and helping escape local optima.",
+        "typical_range": "0.5 - 0.9",
+        "alternatives": [
+          {
+            "value": "0.8",
+            "scenario": "Default value, good starting point"
+          },
+          {
+            "value": "0.5",
+            "scenario": "Slow convergence, may improve generalization"
+          },
+          {
+            "value": "0.95",
+            "scenario": "Aggressive optimization, may lead to instability"
+          }
+        ],
+        "impact": {
+          "convergence_speed": "fast",
+          "generalization": "medium",
+          "stability": "medium"
+        }
+      }
+    ],
+    "model_type": "CNN",
+    "task": "image_classification",
+    "dataset_size": "large"
+  },
+  {
+    "id": "ml_cnn_012",
+    "framework": "unknown",
+    "source_url": "https://github.com/ucloud/uai-sdk/blob/master/examples/tensorflow/train/imagenet/code/imagenet_main.py",
+    "code_snippet": "        batch_size=hparams.train_batch_size,",
+    "hyperparameters": [
+      {
+        "name": "batch_size",
+        "value": "hparams.train_batch_size",
+        "line_number": 308,
+        "char_start": 19,
+        "char_end": 43,
+        "param_type": "training",
+        "explanation": "Batch size determines the number of images processed in each training step. Larger batch sizes can improve convergence speed but may require more memory and potentially lead to overfitting.",
+        "typical_range": "32-256 for GPUs, 16-64 for CPUs",
+        "alternatives": [
+          {
+            "value": "32",
+            "scenario": "Small dataset, limited memory"
+          },
+          {
+            "value": "128",
+            "scenario": "Balanced training speed and memory usage"
+          },
+          {
+            "value": "256",
+            "scenario": "Large dataset, ample memory"
+          }
+        ],
+        "impact": {
+          "convergence_speed": "medium",
+          "generalization": "good",
+          "stability": "medium"
+        }
+      }
+    ],
+    "model_type": "CNN",
+    "task": "image_classification",
+    "dataset_size": "large"
+  },
+  {
+    "id": "ml_cnn_013",
+    "framework": "unknown",
+    "source_url": "https://github.com/ucloud/uai-sdk/blob/master/examples/tensorflow/train/imagenet/code/imagenet_main.py",
+    "code_snippet": "        batch_size=hparams.eval_batch_size,",
+    "hyperparameters": [
+      {
+        "name": "batch_size",
+        "value": "hparams.eval_batch_size",
+        "line_number": 315,
+        "char_start": 19,
+        "char_end": 42,
+        "param_type": "training",
+        "explanation": "The batch size controls the number of samples processed in each iteration during training. A larger value allows for faster training but can also lead to poorer generalization.",
+        "typical_range": "32-64",
+        "alternatives": [
+          {
+            "value": 16,
+            "scenario": "When computational resources are limited."
+          },
+          {
+            "value": 256,
+            "scenario": "When generalization is more important than training speed."
+          }
+        ],
+        "impact": {
+          "convergence_speed": "fast",
+          "generalization": "poor",
+          "stability": "medium"
+        }
+      }
+    ],
+    "model_type": "CNN",
+    "task": "image_classification",
+    "dataset_size": "large"
+  },
+  {
+    "id": "ml_cnn_014",
+    "framework": "unknown",
+    "source_url": "https://github.com/ucloud/uai-sdk/blob/master/examples/tensorflow/train/imagenet/code/imagenet_main.py",
+    "code_snippet": "            batch_size=hparams.train_batch_size,",
+    "hyperparameters": [
+      {
+        "name": "batch_size",
+        "value": "hparams.train_batch_size",
+        "line_number": 379,
+        "char_start": 23,
+        "char_end": 47,
+        "param_type": "training",
+        "explanation": "This hyperparameter defines the number of images processed together during each training step. Smaller batches are computationally faster, but larger ones can potentially improve model convergence.",
+        "typical_range": "32-256",
+        "alternatives": [
+          {
+            "value": "small (e.g., 16)",
+            "scenario": "Limited resources"
+          },
+          {
+            "value": "medium (e.g., 64)",
+            "scenario": "Balanced training speed and memory consumption"
+          },
+          {
+            "value": "large (e.g., 128)",
+            "scenario": "Prioritize fast training and convergence"
+          }
+        ],
+        "impact": {
+          "convergence_speed": "fast",
+          "generalization": "mixed",
+          "stability": "medium"
+        }
+      }
+    ],
+    "model_type": "CNN",
+    "task": "image_classification",
+    "dataset_size": "large"
+  },
+  {
+    "id": "ml_cnn_015",
+    "framework": "unknown",
+    "source_url": "https://github.com/ucloud/uai-sdk/blob/master/examples/tensorflow/train/imagenet/code/imagenet_main.py",
+    "code_snippet": "          batch_size=hparams.eval_batch_size,",
+    "hyperparameters": [
+      {
+        "name": "batch_size",
+        "value": "hparams.eval_batch_size",
+        "line_number": 388,
+        "char_start": 21,
+        "char_end": 44,
+        "param_type": "training",
+        "explanation": "This parameter specifies the number of input images fed into the ResNet classifier at once during the evaluation process. Larger batch sizes can lead to faster training, but require more memory and may result in unstable training.",
+        "typical_range": "16-64 for image classification on GPUs",
+        "alternatives": [
+          {
+            "value": "16",
+            "scenario": "Limited memory"
+          },
+          {
+            "value": "32",
+            "scenario": "Balancing performance and memory"
+          },
+          {
+            "value": "64",
+            "scenario": "Prioritizing performance on powerful GPUs"
+          }
+        ],
+        "impact": {
+          "convergence_speed": "faster for larger values, slower for smaller values",
+          "generalization": "similar or slightly worse for larger values",
+          "stability": "potentially less stable for larger values"
+        }
+      }
+    ],
+    "model_type": "CNN",
+    "task": "image_classification",
+    "dataset_size": "large"
+  }
+]

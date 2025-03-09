@@ -4,7 +4,7 @@ import os
 PROJECT_ID = "capstone-449418"
 LOCATION = "us-central1" 
 SERVICE_ACCOUNT_KEY = os.path.join(os.path.dirname(os.path.dirname(__file__)), 
-                                   "credentials", "capstone-449418-38bd0569f608.json")
+                                   "credentials", "695116221974-hqg9ap5bh4ok0nc23bbbkh8h30nhqa8d.apps.googleusercontent.com")
 CREDENTIALS_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "credentials")
 
 # Storage settings
