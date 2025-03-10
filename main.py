@@ -122,4 +122,4 @@ def process_and_enrich_data(sample_limit=100, process_limit=20):
 
 if __name__ == "__main__":
     # Use smaller sample sizes for testing
-    process_and_enrich_data(sample_limit=10, process_limit=5)
+    process_and_enrich_data(sample_limit=1000, process_limit=1000)

@@ -1,0 +1,16 @@
+{
+  "tuningJobSpec": {
+    "baseModelId": "gemini-1.0-pro",
+    "tuningJobId": "hyperparameter-explainer_20250310_000241",
+    "displayName": "hyperparameter-explainer_20250310_000241",
+    "trainingDatasetUri": "gs://hyperparameter_deep_learning/finetuning/train.jsonl",
+    "validationDatasetUri": "gs://hyperparameter_deep_learning/finetuning/validation.jsonl",
+    "hyperParameters": {
+      "batchSize": 8,
+      "learningRate": 0.0001,
+      "epochs": 5
+    }
+  },
+  "project": "capstone-449418",
+  "location": "us-central1"
+}

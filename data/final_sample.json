@@ -1,40 +1,40 @@
 {
-  "id": "tf_tfm_001",
+  "id": "tf_nn_001",
   "framework": "tensorflow",
-  "source_url": "https://github.com/google/uncertainty-baselines/blob/master/uncertainty_baselines/models/bert_sngp.py",
-  "code_snippet": "        name='output_layer_norm', axis=-1, epsilon=1e-12, dtype=tf.float32)",
+  "source_url": "https://github.com/Xeralux/tensorflow/blob/master/tensorflow/python/ops/nn_test.py",
+  "code_snippet": "             batch_size=batch_size,",
   "hyperparameters": [
     {
-      "name": "epsilon",
-      "value": "1e-12",
-      "line_number": 176,
-      "char_start": 51,
-      "char_end": 56,
-      "param_type": "optimizer",
-      "explanation": "The epsilon parameter controls the numerical stability of the layer normalization layer by adding a small value to the denominator during division. This helps to prevent division by zero errors and improves the overall stability of the model.",
-      "typical_range": "(1e-5, 1e-12)",
+      "name": "batch_size",
+      "value": "batch_size",
+      "line_number": 559,
+      "char_start": 24,
+      "char_end": 34,
+      "param_type": "training",
+      "explanation": "Batch size defines the number of samples processed together in a single training iteration. It controls memory usage, convergence speed, and stability.",
+      "typical_range": "32-256",
       "alternatives": [
         {
-          "value": "1e-6",
-          "scenario": "For moderate stability"
+          "value": "32",
+          "scenario": "Limited memory or fast training"
         },
         {
-          "value": "1e-8",
-          "scenario": "For higher stability"
+          "value": "128",
+          "scenario": "Balance between memory and speed"
         },
         {
-          "value": "1e-10",
-          "scenario": "For very high stability with potential performance impact"
+          "value": "256",
+          "scenario": "Large memory or slower training"
         }
       ],
       "impact": {
         "convergence_speed": "medium",
         "generalization": "good",
-        "stability": "high"
+        "stability": "medium"
       }
     }
   ],
-  "model_type": "Transformer",
-  "task": "sequence_prediction",
-  "dataset_size": "unspecified"
+  "model_type": "Neural Network",
+  "task": "classification",
+  "dataset_size": "large"
 }
